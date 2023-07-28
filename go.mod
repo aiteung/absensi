@@ -6,6 +6,7 @@ require (
 	github.com/aiteung/atdb v0.0.7
 	github.com/aiteung/atmessage v0.0.17
 	github.com/aiteung/musik v0.0.5
+	github.com/mattn/go-sqlite3 v1.14.17
 	go.mau.fi/whatsmeow v0.0.0-20230316102651-f0c131192076
 	go.mongodb.org/mongo-driver v1.11.3
 )
