@@ -1,4 +1,4 @@
-package presensi
+package absensi
 
 import (
 	"os"
