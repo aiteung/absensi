@@ -1,4 +1,4 @@
-module github.com/aiteung/presensi
+module github.com/aiteung/absensi
 
 go 1.20
 
