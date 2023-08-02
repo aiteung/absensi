@@ -18,31 +18,11 @@ func MessageTidakMasukKerja(nama string, long, lat float64, Info *types.MessageI
 }
 
 func MessageMasukKerja(karyawan Karyawan, id interface{}, lokasi string, Info *types.MessageInfo, whatsapp *whatsmeow.Client) {
-	jamMasuk, err := time.Parse("15:04", karyawan.Jam_kerja[0].Jam_masuk) // Ambil jam masuk dari database dan konversi ke tipe time.Time
-	if err != nil {
-		// Handle error jika parsing jam masuk gagal
-		fmt.Println("Error parsing jam masuk:", err)
-		return
-	}
-	waktuSekarang := time.Now().UTC()         // Ambil waktu saat ini
-	selisihJam := waktuSekarang.Sub(jamMasuk) // Hitung selisih waktu
-	// Format selisih jam menjadi "HH:mm:ss"
-	selisihJamFormatted := fmt.Sprintf("%02d:%02d:%02d", int(selisihJam.Hours()), int(selisihJam.Minutes())%60, int(selisihJam.Seconds())%60)
 	msg := "*Masuk Kerja*\n"
 	msg = msg + "Hai kak _" + karyawan.Nama + "_,\ndari bagian *" + karyawan.Jabatan + "*, \nmakasih ya sudah melakukan presensi masuk kerja\nLokasi : _*" + lokasi + "*_\nJangan lupa presensi pulangnya ya kak, caranya tinggal share live location lagi aja sama seperti presensi masuk tapi pada saat jam pulang ya kak. Makasi kak...\n"
-	msg = msg + "Jam Masuk: " + karyawan.Jam_kerja[0].Jam_masuk + "\n" // Tambahkan informasi jam masuk
-	msg = msg + "Selisih Waktu: " + selisihJamFormatted + "\n"         // Tambahkan informasi selisih waktu
 	msg = msg + fmt.Sprintf("ID presensi masuk : %v", id)
 	atmessage.SendMessage(msg, Info.Sender, whatsapp)
 }
-
-// func MessageMasukKerja2(karyawan Karyawan, id interface{}, lokasi string, Info *types.MessageInfo, whatsapp *whatsmeow.Client) {
-// 	msg := "*Masuk Kerja Ke-2*\n"
-// 	msg = msg + "Hai kak _" + karyawan.Nama + "_,\ndari bagian *" + karyawan.Jabatan + "*, \nmakasih ya sudah melakukan presensi masuk kerja yang ke-2\nLokasi : _*" + lokasi + "*_\nJangan lupa presensi pulangnya ya kak, caranya tinggal share live location lagi aja sama seperti presensi masuk tapi pada saat jam pulang ya kak. Makasi kak...\n"
-// 	msg = msg + fmt.Sprintf("ID presensi masuk : %v", id)
-// 	atmessage.SendMessage(msg, Info.Sender, whatsapp)
-
-// }
 
 func MessageJamKerja(karyawan Karyawan, aktifjamkerja time.Duration, presensihariini Presensi, Info *types.MessageInfo, whatsapp *whatsmeow.Client) {
 	msg := "*Keterangan Presensi Kerja*\n"
