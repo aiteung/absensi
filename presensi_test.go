@@ -1,10 +1,10 @@
 package absensi
 
 import (
+	"fmt"
 	"os"
 	"testing"
 
-	"github.com/aiteung/absensi/wa"
 	"github.com/aiteung/atdb"
 	_ "github.com/mattn/go-sqlite3"
 	"go.mau.fi/whatsmeow"
@@ -41,9 +41,16 @@ var Msg = waProto.Message{
 
 var client whatsmeow.Client
 
-func TestGetPresensiThisMonth(t *testing.T) {
-	// GenerateReportCurrentMonth(MongoConn)
+// func TestGetPresensiThisMonth(t *testing.T) {
+// 	// GenerateReportCurrentMonth(MongoConn)
+// 	Pesan.Sender.User = "6289522910966"
+// 	go wa.Runwa(&client)
+// 	Handler(&Pesan, &Msg, &client, MongoConn)
+// }
+
+func TestSelisih(t *testing.T) {
 	Pesan.Sender.User = "6289522910966"
-	go wa.Runwa(&client)
-	Handler(&Pesan, &Msg, &client, MongoConn)
+	karyawan := getKaryawanFromPhoneNumber(MongoConn, Pesan.Sender.User)
+	selisih := SelisihJamMasuk(karyawan)
+	fmt.Println(selisih)
 }
