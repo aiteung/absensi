@@ -20,7 +20,7 @@ func MessageTidakMasukKerja(nama string, long, lat float64, Info *types.MessageI
 func MessageMasukKerja(karyawan Karyawan, id interface{}, lokasi string, selisih string, Info *types.MessageInfo, whatsapp *whatsmeow.Client) {
 	msg := "*Masuk Kerja*\n"
 	msg = msg + "Hai kak _" + karyawan.Nama + "_,\ndari bagian *" + karyawan.Jabatan + "*, \nmakasih ya sudah melakukan presensi masuk kerja\nLokasi : _*" + lokasi + "*_\nJangan lupa presensi pulangnya ya kak, caranya tinggal share live location lagi aja sama seperti presensi masuk tapi pada saat jam pulang ya kak. Makasi kak...\n"
-	msg = msg + fmt.Sprintf("Selisih Jam Masuk : %v\n", selisih)
+	msg = msg + fmt.Sprintf("Selisih Jam Masuk : %s\n", selisih)
 	msg = msg + fmt.Sprintf("ID presensi masuk : %v", id)
 	atmessage.SendMessage(msg, Info.Sender, whatsapp)
 }
