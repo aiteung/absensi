@@ -124,14 +124,14 @@ func SelisihJamMasuk(karyawan Karyawan) (selisihJamFormatted string) {
 
 	// Hitung selisih waktu
 	selisihJam := formatjam.Sub(jamMasuk).String()
-	fmt.Println("Selisih Jam Masuk :", selisihJam)
+	// fmt.Println("Selisih Jam Masuk :", selisihJam)
 
 	// Ubah Hours, Minutes dan Seconds ke Jam, Menit dan Detik
 	selisihJam = strings.Replace(selisihJam, "m", " menit ", 1)
 	selisihJam = strings.Replace(selisihJam, "h", " jam ", 1)
 	selisihJam = strings.Replace(selisihJam, "s", " detik ", 1)
 	fmt.Println("Final Selisih Jam Masuk :", selisihJam)
-	return
+	return selisihJam
 }
 
 func fillStructPresensi(Info *types.MessageInfo, Message *waProto.Message, Checkin string, mongoconn *mongo.Database) (presensi Presensi) {
