@@ -51,6 +51,13 @@ var client whatsmeow.Client
 func TestSelisih(t *testing.T) {
 	Pesan.Sender.User = "6289522910966"
 	karyawan := getKaryawanFromPhoneNumber(MongoConn, Pesan.Sender.User)
-	selisih := SelisihJamMasuk(karyawan)
-	fmt.Println(selisih)
+	cekhadir := GetTimeSekarang(karyawan)
+	fmt.Println(cekhadir)
 }
+
+// func TestGetPresensiThisMonth(t *testing.T) {
+// 	// GenerateReportCurrentMonth(MongoConn)
+// 	Pesan.Sender.User = "6289522910966"
+// 	go wa.Runwa(&client)
+// 	Handler(&Pesan, &Msg, &client, MongoConn)
+// }

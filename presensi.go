@@ -80,6 +80,36 @@ func tidakhadirHandler(Info *types.MessageInfo, Message *waProto.Message, whatsa
 }
 
 func hadirHandler(Info *types.MessageInfo, Message *waProto.Message, lokasi string, whatsapp *whatsmeow.Client, mongoconn *mongo.Database) {
+	// presensihariini := getPresensiTodayFromPhoneNumber(mongoconn, Info.Sender.User)
+	// karyawan := getKaryawanFromPhoneNumber(mongoconn, Info.Sender.User)
+	// fmt.Println(karyawan.Jam_kerja[0].Durasi)
+
+	// currentTime := time.Now().UTC()
+	// jamMasuk := time.Date(currentTime.Year(), currentTime.Month(), currentTime.Day(), 8, 0, 0, 0, currentTime.Location())
+
+	// if !reflect.ValueOf(presensihariini).IsZero() {
+	// 	fmt.Println(presensihariini)
+	// 	aktifjamkerja := currentTime.Sub(presensihariini.ID.Timestamp().UTC())
+	// 	fmt.Println(aktifjamkerja)
+	// 	if int(aktifjamkerja.Hours()) >= karyawan.Jam_kerja[0].Durasi {
+	// 		id := InsertPresensi(Info, Message, "pulang", mongoconn)
+	// 		MessagePulangKerja(karyawan, aktifjamkerja, id, lokasi, Info, whatsapp)
+	// 	} else {
+	// 		MessageJamKerja(karyawan, aktifjamkerja, presensihariini, Info, whatsapp)
+	// 	}
+	// } else {
+	// 	selisih := SelisihJamMasuk(karyawan)
+	// 	if currentTime.Before(jamMasuk) {
+	// 		id := InsertPresensi(Info, Message, "masuk", mongoconn)
+	// 		MessageMasukKerjaCepat(karyawan, id, lokasi, selisih, Info, whatsapp)
+	// 	} else if currentTime.After(jamMasuk) {
+	// 		id := InsertPresensi(Info, Message, "masuk", mongoconn)
+	// 		MessageTerlambatKerja(karyawan, id, lokasi, selisih, Info, whatsapp)
+	// 	} else {
+	// 		id := InsertPresensi(Info, Message, "masuk", mongoconn)
+	// 		MessageMasukKerja(karyawan, id, lokasi, selisih, Info, whatsapp)
+	// 	}
+	// }
 	presensihariini := getPresensiTodayFromPhoneNumber(mongoconn, Info.Sender.User)
 	karyawan := getKaryawanFromPhoneNumber(mongoconn, Info.Sender.User)
 	fmt.Println(karyawan.Jam_kerja[0].Durasi)
@@ -94,9 +124,21 @@ func hadirHandler(Info *types.MessageInfo, Message *waProto.Message, lokasi stri
 			MessageJamKerja(karyawan, aktifjamkerja, presensihariini, Info, whatsapp)
 		}
 	} else {
-		id := InsertPresensi(Info, Message, "masuk", mongoconn)
-		selisih := SelisihJamMasuk(karyawan)
-		MessageMasukKerja(karyawan, id, lokasi, selisih, Info, whatsapp)
+		waktu := GetTimeSekarang(karyawan)
+		masuk := GetTimeKerja(karyawan)
+		if waktu <= masuk {
+			id := InsertPresensi(Info, Message, "masuk", mongoconn)
+			selisih := SelisihJamMasuk(karyawan)
+			MessageMasukKerjaCepat(karyawan, id, lokasi, selisih, Info, whatsapp)
+		} else if waktu >= masuk {
+			id := InsertPresensi(Info, Message, "masuk", mongoconn)
+			selisih := SelisihJamMasuk(karyawan)
+			MessageTerlambatKerja(karyawan, id, lokasi, selisih, Info, whatsapp)
+		} else {
+			id := InsertPresensi(Info, Message, "masuk", mongoconn)
+			selisih := SelisihJamMasuk(karyawan)
+			MessageMasukKerja(karyawan, id, lokasi, selisih, Info, whatsapp)
+		}
 	}
 }
 
@@ -132,6 +174,20 @@ func SelisihJamMasuk(karyawan Karyawan) (selisihJamFormatted string) {
 	selisihJam = strings.Replace(selisihJam, "s", " detik ", 1)
 	fmt.Println("Final Selisih Jam Masuk :", selisihJam)
 	return selisihJam
+}
+
+func GetTimeSekarang(karyawan Karyawan) (timeSekarangFormatted string) {
+	// Definisi lokasi waktu sekarang
+	location, _ := time.LoadLocation("Asia/Jakarta")
+
+	// Waktu Sekarang dan Convert Waktu Sekarang menjadi format 15:04 (string)
+	waktuSekarang := time.Now().In(location).Format("15:04")
+	return waktuSekarang
+}
+
+func GetTimeKerja(karyawan Karyawan) (timeKerjaFormatted string) {
+	jam := strings.Replace(karyawan.Jam_kerja[0].Jam_masuk, ".", ":", 1)
+	return jam
 }
 
 func fillStructPresensi(Info *types.MessageInfo, Message *waProto.Message, Checkin string, mongoconn *mongo.Database) (presensi Presensi) {
