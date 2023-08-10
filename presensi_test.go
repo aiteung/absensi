@@ -51,7 +51,7 @@ var client whatsmeow.Client
 func TestSelisih(t *testing.T) {
 	Pesan.Sender.User = "6289522910966"
 	karyawan := getKaryawanFromPhoneNumber(MongoConn, Pesan.Sender.User)
-	cekhadir := GetTimeSekarang(karyawan)
+	cekhadir := GetTimePulang(karyawan)
 	fmt.Println(cekhadir)
 }
 

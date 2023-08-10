@@ -117,9 +117,20 @@ func hadirHandler(Info *types.MessageInfo, Message *waProto.Message, lokasi stri
 		fmt.Println(presensihariini)
 		aktifjamkerja := time.Now().UTC().Sub(presensihariini.ID.Timestamp().UTC())
 		fmt.Println(aktifjamkerja)
-		if int(aktifjamkerja.Hours()) >= karyawan.Jam_kerja[0].Durasi {
+		waktu := GetTimeSekarang(karyawan)
+		pulang := GetTimePulang(karyawan)
+		selisih := SelisihJamMasuk(karyawan)
+
+		// Ganti kondisi di bawah ini
+		if int(aktifjamkerja.Hours()) >= karyawan.Jam_kerja[0].Durasi || !presensihariini.ID.IsZero() {
 			id := InsertPresensi(Info, Message, "pulang", mongoconn)
-			MessagePulangKerja(karyawan, aktifjamkerja, id, lokasi, Info, whatsapp)
+			if waktu <= pulang {
+				MessagePulangKerjaCepat(karyawan, aktifjamkerja, id, lokasi, selisih, Info, whatsapp)
+			} else if waktu >= pulang {
+				MessagePulangLebihLama(karyawan, aktifjamkerja, id, lokasi, selisih, Info, whatsapp)
+			} else {
+				MessagePulangKerja(karyawan, aktifjamkerja, id, lokasi, Info, whatsapp)
+			}
 		} else {
 			MessageJamKerja(karyawan, aktifjamkerja, presensihariini, Info, whatsapp)
 		}
@@ -187,6 +198,11 @@ func GetTimeSekarang(karyawan Karyawan) (timeSekarangFormatted string) {
 
 func GetTimeKerja(karyawan Karyawan) (timeKerjaFormatted string) {
 	jam := strings.Replace(karyawan.Jam_kerja[0].Jam_masuk, ".", ":", 1)
+	return jam
+}
+
+func GetTimePulang(karyawan Karyawan) (timePulangFormatted string) {
+	jam := strings.Replace(karyawan.Jam_kerja[0].Jam_keluar, ".", ":", 1)
 	return jam
 }
 
