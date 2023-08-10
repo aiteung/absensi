@@ -119,15 +119,15 @@ func hadirHandler(Info *types.MessageInfo, Message *waProto.Message, lokasi stri
 		fmt.Println(aktifjamkerja)
 		waktu := GetTimeSekarang(karyawan)
 		pulang := GetTimePulang(karyawan)
-		selisih := SelisihJamPulang(karyawan)
+		selisihpulang := SelisihJamPulang(karyawan)
 
 		// Ganti kondisi di bawah ini
 		if int(aktifjamkerja.Hours()) >= karyawan.Jam_kerja[0].Durasi || !presensihariini.ID.IsZero() {
 			id := InsertPresensi(Info, Message, "pulang", mongoconn)
 			if waktu <= pulang {
-				MessagePulangKerjaCepat(karyawan, aktifjamkerja, id, lokasi, selisih, Info, whatsapp)
+				MessagePulangKerjaCepat(karyawan, aktifjamkerja, id, lokasi, selisihpulang, Info, whatsapp)
 			} else if waktu >= pulang {
-				MessagePulangLebihLama(karyawan, aktifjamkerja, id, lokasi, selisih, Info, whatsapp)
+				MessagePulangLebihLama(karyawan, aktifjamkerja, id, lokasi, selisihpulang, Info, whatsapp)
 			} else {
 				MessagePulangKerja(karyawan, aktifjamkerja, id, lokasi, Info, whatsapp)
 			}
@@ -139,16 +139,15 @@ func hadirHandler(Info *types.MessageInfo, Message *waProto.Message, lokasi stri
 		masuk := GetTimeKerja(karyawan)
 		if waktu <= masuk {
 			id := InsertPresensi(Info, Message, "masuk", mongoconn)
-			selisih := SelisihJamMasuk(karyawan)
-			MessageMasukKerjaCepat(karyawan, id, lokasi, selisih, Info, whatsapp)
+			selisihmasuk := SelisihJamMasuk(karyawan)
+			MessageMasukKerjaCepat(karyawan, id, lokasi, selisihmasuk, Info, whatsapp)
 		} else if waktu >= masuk {
 			id := InsertPresensi(Info, Message, "masuk", mongoconn)
-			selisih := SelisihJamMasuk(karyawan)
-			MessageTerlambatKerja(karyawan, id, lokasi, selisih, Info, whatsapp)
+			selisihmasuk := SelisihJamMasuk(karyawan)
+			MessageTerlambatKerja(karyawan, id, lokasi, selisihmasuk, Info, whatsapp)
 		} else {
 			id := InsertPresensi(Info, Message, "masuk", mongoconn)
-			selisih := SelisihJamMasuk(karyawan)
-			MessageMasukKerja(karyawan, id, lokasi, selisih, Info, whatsapp)
+			MessageMasukKerja(karyawan, id, lokasi, Info, whatsapp)
 		}
 	}
 }

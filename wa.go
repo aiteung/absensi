@@ -17,26 +17,25 @@ func MessageTidakMasukKerja(nama string, long, lat float64, Info *types.MessageI
 	atmessage.SendMessage(msg, Info.Sender, whatsapp)
 }
 
-func MessageMasukKerjaCepat(karyawan Karyawan, id interface{}, lokasi string, selisih string, Info *types.MessageInfo, whatsapp *whatsmeow.Client) {
+func MessageMasukKerjaCepat(karyawan Karyawan, id interface{}, lokasi string, selisihmasuk string, Info *types.MessageInfo, whatsapp *whatsmeow.Client) {
 	msg := "*Masuk Kerja*\n"
-	msg = msg + "Hai kak _" + karyawan.Nama + "_,\ndari bagian *" + karyawan.Jabatan + "*, \n*kakak masuk lebih cepat* *" + selisih + "*\nLokasi : _*" + lokasi + "*_\nJangan lupa presensi pulangnya ya kak, caranya tinggal share live location lagi aja sama seperti presensi masuk tapi pada saat jam pulang ya kak. Makasi kak...\n"
-	msg = msg + fmt.Sprintf("Selisih Jam Masuk : %s\n", selisih)
+	msg = msg + "Hai kak _" + karyawan.Nama + "_,\ndari bagian *" + karyawan.Jabatan + "*, \nkakak masuk lebih cepat " + selisihmasuk + "\nLokasi : _*" + lokasi + "*_\nJangan lupa presensi pulangnya ya kak, caranya tinggal share live location lagi aja sama seperti presensi masuk tapi pada saat jam pulang ya kak. Makasi kak...\n"
+	msg = msg + fmt.Sprintf("Selisih Jam Masuk : %s\n", selisihmasuk)
 	msg = msg + fmt.Sprintf("ID presensi masuk : %v", id)
 	atmessage.SendMessage(msg, Info.Sender, whatsapp)
 }
 
-func MessageTerlambatKerja(karyawan Karyawan, id interface{}, lokasi string, selisih string, Info *types.MessageInfo, whatsapp *whatsmeow.Client) {
+func MessageTerlambatKerja(karyawan Karyawan, id interface{}, lokasi string, selisihmasuk string, Info *types.MessageInfo, whatsapp *whatsmeow.Client) {
 	msg := "*Masuk Kerja*\n"
-	msg = msg + "Hai kak _" + karyawan.Nama + "_,\ndari bagian *" + karyawan.Jabatan + "*, \n*kakak masuk terlambat* " + "*" + selisih + "*" + "\nLokasi : _*" + lokasi + "*_\nJangan lupa presensi pulangnya ya kak, caranya tinggal share live location lagi aja sama seperti presensi masuk tapi pada saat jam pulang ya kak. Makasi kak...\n"
-	msg = msg + fmt.Sprintf("Waktu Terlambatnya : %s\n", selisih)
+	msg = msg + "Hai kak _" + karyawan.Nama + "_,\ndari bagian *" + karyawan.Jabatan + "*, \nkakak masuk terlambat " + selisihmasuk + "\nLokasi : _*" + lokasi + "*_\nJangan lupa presensi pulangnya ya kak, caranya tinggal share live location lagi aja sama seperti presensi masuk tapi pada saat jam pulang ya kak. Makasi kak...\n"
+	msg = msg + fmt.Sprintf("Waktu Terlambatnya : %s\n", selisihmasuk)
 	msg = msg + fmt.Sprintf("ID presensi masuk : %v", id)
 	atmessage.SendMessage(msg, Info.Sender, whatsapp)
 }
 
-func MessageMasukKerja(karyawan Karyawan, id interface{}, lokasi string, selisih string, Info *types.MessageInfo, whatsapp *whatsmeow.Client) {
+func MessageMasukKerja(karyawan Karyawan, id interface{}, lokasi string, Info *types.MessageInfo, whatsapp *whatsmeow.Client) {
 	msg := "*Masuk Kerja*\n"
 	msg = msg + "Hai kak _" + karyawan.Nama + "_,\ndari bagian *" + karyawan.Jabatan + "*, \nmakasih ya sudah melakukan presensi masuk kerja\nLokasi : _*" + lokasi + "*_\nJangan lupa presensi pulangnya ya kak, caranya tinggal share live location lagi aja sama seperti presensi masuk tapi pada saat jam pulang ya kak. Makasi kak...\n"
-	msg = msg + fmt.Sprintf("Masuk Lebih Cepat : %s\n", selisih)
 	msg = msg + fmt.Sprintf("ID presensi masuk : %v", id)
 	atmessage.SendMessage(msg, Info.Sender, whatsapp)
 }
@@ -55,16 +54,16 @@ func MessagePulangKerja(karyawan Karyawan, aktifjamkerja time.Duration, id inter
 	atmessage.SendMessage(msg, Info.Sender, whatsapp)
 }
 
-func MessagePulangKerjaCepat(karyawan Karyawan, aktifjamkerja time.Duration, id interface{}, lokasi string, selisih string, Info *types.MessageInfo, whatsapp *whatsmeow.Client) {
+func MessagePulangKerjaCepat(karyawan Karyawan, aktifjamkerja time.Duration, id interface{}, lokasi string, selisihpulang string, Info *types.MessageInfo, whatsapp *whatsmeow.Client) {
 	msg := "*Pulang Kerja*\n"
-	msg = msg + "Hai kak _" + karyawan.Nama + "_,\ndari bagian *" + karyawan.Jabatan + "*, \n*kakak pulang lebih cepat* " + "*" + selisih + "*" + "\nLokasi : _*" + lokasi + "*_\n"
+	msg = msg + "Hai kak _" + karyawan.Nama + "_,\ndari bagian *" + karyawan.Jabatan + "*, \nkakak pulang lebih cepat " + selisihpulang + "\nLokasi : _*" + lokasi + "*_\n"
 	msg = msg + fmt.Sprintf("\nID presensi pulang : %v", id) + "\n" + "Durasi Kerja : " + strings.Replace(aktifjamkerja.String(), "h", " jam ", 1)
 	atmessage.SendMessage(msg, Info.Sender, whatsapp)
 }
 
-func MessagePulangLebihLama(karyawan Karyawan, aktifjamkerja time.Duration, id interface{}, lokasi string, selisih string, Info *types.MessageInfo, whatsapp *whatsmeow.Client) {
+func MessagePulangLebihLama(karyawan Karyawan, aktifjamkerja time.Duration, id interface{}, lokasi string, selisihpulang string, Info *types.MessageInfo, whatsapp *whatsmeow.Client) {
 	msg := "*Pulang Kerja*\n"
-	msg = msg + "Hai kak _" + karyawan.Nama + "_,\ndari bagian *" + karyawan.Jabatan + "*, \n*kakak pulang lebih lama* *" + selisih + "*\nLokasi : _*" + lokasi + "*_\n"
+	msg = msg + "Hai kak _" + karyawan.Nama + "_,\ndari bagian *" + karyawan.Jabatan + "*, \nkakak pulang lebih lama " + selisihpulang + "\nLokasi : _*" + lokasi + "*_\n"
 	msg = msg + fmt.Sprintf("\nID presensi pulang : %v", id) + "\n" + "Durasi Kerja : " + strings.Replace(aktifjamkerja.String(), "h", " jam ", 1)
 	atmessage.SendMessage(msg, Info.Sender, whatsapp)
 }
