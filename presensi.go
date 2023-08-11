@@ -138,11 +138,11 @@ func hadirHandler(Info *types.MessageInfo, Message *waProto.Message, lokasi stri
 	} else {
 		waktu := GetTimeSekarang(karyawan)
 		masuk := GetTimeKerja(karyawan)
-		if waktu <= masuk {
+		if waktu < masuk {
 			id := InsertPresensi(Info, Message, "masuk", mongoconn)
 			selisihmasukcepat := SelisihJamMasukCepat(karyawan)
 			MessageMasukKerjaCepat(karyawan, id, lokasi, selisihmasukcepat, Info, whatsapp)
-		} else if waktu >= masuk {
+		} else if waktu > masuk {
 			id := InsertPresensi(Info, Message, "masuk", mongoconn)
 			selisihmasuk := SelisihJamMasuk(karyawan)
 			MessageTerlambatKerja(karyawan, id, lokasi, selisihmasuk, Info, whatsapp)
