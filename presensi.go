@@ -125,9 +125,9 @@ func hadirHandler(Info *types.MessageInfo, Message *waProto.Message, lokasi stri
 		// Ganti kondisi di bawah ini
 		if int(aktifjamkerja.Hours()) >= karyawan.Jam_kerja[0].Durasi || !presensihariini.ID.IsZero() {
 			id := InsertPresensi(Info, Message, "pulang", mongoconn)
-			if waktu <= pulang {
+			if waktu < pulang {
 				MessagePulangKerjaCepat(karyawan, aktifjamkerja, id, lokasi, selisihpulangcepat, Info, whatsapp)
-			} else if waktu >= pulang {
+			} else if waktu > pulang {
 				MessagePulangLebihLama(karyawan, aktifjamkerja, id, lokasi, selisihpulang, Info, whatsapp)
 			} else {
 				MessagePulangKerja(karyawan, aktifjamkerja, id, lokasi, Info, whatsapp)
