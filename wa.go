@@ -19,7 +19,7 @@ func MessageTidakMasukKerja(nama string, long, lat float64, Info *types.MessageI
 
 func MessageMasukKerjaCepat(karyawan Karyawan, id interface{}, lokasi string, selisihmasuk string, Info *types.MessageInfo, whatsapp *whatsmeow.Client) {
 	msg := "*Masuk Kerja*\n"
-	msg = msg + "Hai kak _*" + karyawan.Nama + "*_,\ndari bagian *" + karyawan.Jabatan + "*, \nkakak masuk lebih cepat " + selisihmasuk + "\nLokasi : _*" + lokasi + "*_\nJangan lupa presensi pulangnya ya kak pada pukul 16.30 WIB, caranya tinggal share live location lagi aja sama seperti presensi masuk tapi pada saat jam pulang ya kak.\nJika kakak presensi pulang lebih dari 16.30 WIB maka tetap dihitung pukul 16.30 karena presensi akan direkap bagian SDM pada pukul 16.45 WIB.\nJika kakak tidak presensi pulang maka dianggap tidak hadir.\nMakasi kak...\n"
+	msg = msg + "Hai kak _*" + karyawan.Nama + "*_,\ndari bagian *" + karyawan.Jabatan + "*, \nkakak masuk lebih cepat " + selisihmasuk + "\nLokasi : _*" + lokasi + "*_\nJangan lupa presensi pulangnya ya kak caranya tinggal share live location lagi aja sama seperti presensi masuk tapi pada saat jam pulang ya kak.\nJika kakak tidak presensi pulang maka dianggap *tidak hadir*\nMakasi kak...\n"
 	msg = msg + fmt.Sprintf("Selisih Jam Masuk : %s\n", selisihmasuk)
 	msg = msg + fmt.Sprintf("ID presensi masuk : %v", id)
 	atmessage.SendMessage(msg, Info.Sender, whatsapp)
@@ -27,7 +27,7 @@ func MessageMasukKerjaCepat(karyawan Karyawan, id interface{}, lokasi string, se
 
 func MessageTerlambatKerja(karyawan Karyawan, id interface{}, lokasi string, selisihmasuk string, Info *types.MessageInfo, whatsapp *whatsmeow.Client) {
 	msg := "*Masuk Kerja*\n"
-	msg = msg + "Hai kak _*" + karyawan.Nama + "*_,\ndari bagian *" + karyawan.Jabatan + "*, \nkakak masuk terlambat " + selisihmasuk + "\nLokasi : _*" + lokasi + "*_\nJangan lupa presensi pulangnya ya kak pada pukul 16.30 WIB, caranya tinggal share live location lagi aja sama seperti presensi masuk tapi pada saat jam pulang ya kak.\nJika kakak presensi pulang lebih dari 16.30 WIB maka tetap dihitung pukul 16.30 karena presensi akan direkap bagian SDM pada pukul 16.45 WIB.\nJika kakak tidak presensi pulang maka dianggap tidak hadir.\nMakasi kak...\n"
+	msg = msg + "Hai kak _*" + karyawan.Nama + "*_,\ndari bagian *" + karyawan.Jabatan + "*, \nkakak masuk terlambat " + selisihmasuk + "\nLokasi : _*" + lokasi + "*_\nJangan lupa presensi pulangnya ya kak caranya tinggal share live location lagi aja sama seperti presensi masuk tapi pada saat jam pulang ya kak.\nJika kakak tidak presensi pulang maka dianggap *tidak hadir*.\nMakasi kak...\n"
 	msg = msg + fmt.Sprintf("Waktu Terlambatnya : %s\n", selisihmasuk)
 	msg = msg + fmt.Sprintf("ID presensi masuk : %v", id)
 	atmessage.SendMessage(msg, Info.Sender, whatsapp)
@@ -35,7 +35,7 @@ func MessageTerlambatKerja(karyawan Karyawan, id interface{}, lokasi string, sel
 
 func MessageMasukKerja(karyawan Karyawan, id interface{}, lokasi string, Info *types.MessageInfo, whatsapp *whatsmeow.Client) {
 	msg := "*Masuk Kerja*\n"
-	msg = msg + "Hai kak _*" + karyawan.Nama + "*_,\ndari bagian *" + karyawan.Jabatan + "*, \nmakasih ya sudah melakukan presensi masuk kerja\nKakak masuk tepat waktu pada pukul 08.00\nLokasi : _*" + lokasi + "*_\nJangan lupa presensi pulangnya ya kak pada pukul 16.30 WIB, caranya tinggal share live location lagi aja sama seperti presensi masuk tapi pada saat jam pulang ya kak.\nJika kakak presensi pulang lebih dari 16.30 WIB maka tetap dihitung pukul 16.30 karena presensi akan direkap bagian SDM pada pukul 16.45 WIB.\nJika kakak tidak presensi pulang maka dianggap tidak hadir.\nMakasi kak...\n"
+	msg = msg + "Hai kak _*" + karyawan.Nama + "*_,\ndari bagian *" + karyawan.Jabatan + "*, \nmakasih ya sudah melakukan presensi masuk kerja\nKakak masuk tepat waktu pada pukul 08.00\nLokasi : _*" + lokasi + "*_\nJangan lupa presensi pulangnya ya kak caranya tinggal share live location lagi aja sama seperti presensi masuk tapi pada saat jam pulang ya kak.\nJika kakak tidak presensi pulang maka dianggap *tidak hadir*.\nMakasi kak...\n"
 	msg = msg + fmt.Sprintf("ID presensi masuk : %v", id)
 	atmessage.SendMessage(msg, Info.Sender, whatsapp)
 }
