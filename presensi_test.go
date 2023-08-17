@@ -7,7 +7,8 @@ import (
 
 	"github.com/aiteung/atdb"
 	_ "github.com/mattn/go-sqlite3"
-	"go.mau.fi/whatsmeow"
+
+	// "go.mau.fi/whatsmeow"
 	waProto "go.mau.fi/whatsmeow/binary/proto"
 	"go.mau.fi/whatsmeow/types"
 )
@@ -19,9 +20,9 @@ var MongoInfo = atdb.DBInfo{
 
 var MongoConn = atdb.MongoConnect(MongoInfo)
 
-var pengirim = types.JID{
-	User: "6289522910966",
-}
+// var pengirim = types.JID{
+// 	User: "6289522910966",
+// }
 
 var Pesan = types.MessageInfo{
 	PushName: "Testing",
@@ -39,7 +40,7 @@ var Msg = waProto.Message{
 	LiveLocationMessage: &LokConn,
 }
 
-var client whatsmeow.Client
+// var client whatsmeow.Client
 
 // func TestGetPresensiThisMonth(t *testing.T) {
 // 	// GenerateReportCurrentMonth(MongoConn)

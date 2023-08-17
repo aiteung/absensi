@@ -80,38 +80,7 @@ func tidakhadirHandler(Info *types.MessageInfo, Message *waProto.Message, whatsa
 }
 
 func hadirHandler(Info *types.MessageInfo, Message *waProto.Message, lokasi string, whatsapp *whatsmeow.Client, mongoconn *mongo.Database) {
-	// presensihariini := getPresensiTodayFromPhoneNumber(mongoconn, Info.Sender.User)
-	// karyawan := getKaryawanFromPhoneNumber(mongoconn, Info.Sender.User)
-	// fmt.Println(karyawan.Jam_kerja[0].Durasi)
-
-	// currentTime := time.Now().UTC()
-	// jamMasuk := time.Date(currentTime.Year(), currentTime.Month(), currentTime.Day(), 8, 0, 0, 0, currentTime.Location())
-
-	// if !reflect.ValueOf(presensihariini).IsZero() {
-	// 	fmt.Println(presensihariini)
-	// 	aktifjamkerja := currentTime.Sub(presensihariini.ID.Timestamp().UTC())
-	// 	fmt.Println(aktifjamkerja)
-	// 	if int(aktifjamkerja.Hours()) >= karyawan.Jam_kerja[0].Durasi {
-	// 		id := InsertPresensi(Info, Message, "pulang", mongoconn)
-	// 		MessagePulangKerja(karyawan, aktifjamkerja, id, lokasi, Info, whatsapp)
-	// 	} else {
-	// 		MessageJamKerja(karyawan, aktifjamkerja, presensihariini, Info, whatsapp)
-	// 	}
-	// } else {
-	// 	selisih := SelisihJamMasuk(karyawan)
-	// 	if currentTime.Before(jamMasuk) {
-	// 		id := InsertPresensi(Info, Message, "masuk", mongoconn)
-	// 		MessageMasukKerjaCepat(karyawan, id, lokasi, selisih, Info, whatsapp)
-	// 	} else if currentTime.After(jamMasuk) {
-	// 		id := InsertPresensi(Info, Message, "masuk", mongoconn)
-	// 		MessageTerlambatKerja(karyawan, id, lokasi, selisih, Info, whatsapp)
-	// 	} else {
-	// 		id := InsertPresensi(Info, Message, "masuk", mongoconn)
-	// 		MessageMasukKerja(karyawan, id, lokasi, selisih, Info, whatsapp)
-	// 	}
-	// }
-
-	// YANG BENAR SUDAH BERJALAN
+	// CODE AWAL
 	presensihariini := getPresensiTodayFromPhoneNumber(mongoconn, Info.Sender.User)
 	karyawan := getKaryawanFromPhoneNumber(mongoconn, Info.Sender.User)
 	fmt.Println(karyawan.Jam_kerja[0].Durasi)
@@ -119,76 +88,45 @@ func hadirHandler(Info *types.MessageInfo, Message *waProto.Message, lokasi stri
 		fmt.Println(presensihariini)
 		aktifjamkerja := time.Now().UTC().Sub(presensihariini.ID.Timestamp().UTC())
 		fmt.Println(aktifjamkerja)
-		waktu := GetTimeSekarang(karyawan)
-		pulang := GetTimePulang(karyawan)
-		selisihpulang := SelisihJamPulang(karyawan)
-		selisihpulangcepat := SelisihJamPulangCepat(karyawan)
-
-		// Ganti kondisi di bawah ini
-		if int(aktifjamkerja.Hours()) >= karyawan.Jam_kerja[0].Durasi || !presensihariini.ID.IsZero() {
+		if int(aktifjamkerja.Hours()) >= karyawan.Jam_kerja[0].Durasi {
 			id := InsertPresensi(Info, Message, "pulang", mongoconn)
-			if waktu < pulang {
-				MessagePulangKerjaCepat(karyawan, aktifjamkerja, id, lokasi, selisihpulangcepat, Info, whatsapp)
-			} else if waktu > pulang {
-				MessagePulangLebihLama(karyawan, aktifjamkerja, id, lokasi, selisihpulang, Info, whatsapp)
-			} else {
-				MessagePulangKerja(karyawan, aktifjamkerja, id, lokasi, Info, whatsapp)
-			}
+			MessagePulangKerja(karyawan, aktifjamkerja, id, lokasi, Info, whatsapp)
 		} else {
 			MessageJamKerja(karyawan, aktifjamkerja, presensihariini, Info, whatsapp)
 		}
 	} else {
-		waktu := GetTimeSekarang(karyawan)
-		masuk := GetTimeKerja(karyawan)
-		if waktu < masuk {
-			id := InsertPresensi(Info, Message, "masuk", mongoconn)
-			selisihmasukcepat := SelisihJamMasukCepat(karyawan)
-			MessageMasukKerjaCepat(karyawan, id, lokasi, selisihmasukcepat, Info, whatsapp)
-		} else if waktu > masuk {
-			id := InsertPresensi(Info, Message, "masuk", mongoconn)
-			selisihmasuk := SelisihJamMasuk(karyawan)
-			MessageTerlambatKerja(karyawan, id, lokasi, selisihmasuk, Info, whatsapp)
-		} else {
-			id := InsertPresensi(Info, Message, "masuk", mongoconn)
-			MessageMasukKerja(karyawan, id, lokasi, Info, whatsapp)
-		}
+		id := InsertPresensi(Info, Message, "masuk", mongoconn)
+		MessageMasukKerja(karyawan, id, lokasi, Info, whatsapp)
 	}
-	// END YANG BENAR
+	// END CODE AWAL
 
+	// YANG BENAR SUDAH BERJALAN
 	// presensihariini := getPresensiTodayFromPhoneNumber(mongoconn, Info.Sender.User)
 	// karyawan := getKaryawanFromPhoneNumber(mongoconn, Info.Sender.User)
-
+	// fmt.Println(karyawan.Jam_kerja[0].Durasi)
 	// if !reflect.ValueOf(presensihariini).IsZero() {
 	// 	fmt.Println(presensihariini)
+	// 	aktifjamkerja := time.Now().UTC().Sub(presensihariini.ID.Timestamp().UTC())
+	// 	fmt.Println(aktifjamkerja)
 	// 	waktu := GetTimeSekarang(karyawan)
+	// 	pulang := GetTimePulang(karyawan)
+	// 	selisihpulang := SelisihJamPulang(karyawan)
+	// 	selisihpulangcepat := SelisihJamPulangCepat(karyawan)
 
-	// 	if presensihariini.Checkin == "pulang" {
-	// 		// Sudah melakukan presensi pulang, tidak bisa melakukan lagi
-	// 		MessagePresensiSudahPulang(karyawan, Info, whatsapp)
-	// 	} else if presensihariini.Checkin == "masuk" {
-	// 		// Sudah melakukan presensi masuk, cek apakah bisa melakukan presensi pulang
-	// 		aktifjamkerja := time.Now().UTC().Sub(presensihariini.ID.Timestamp().UTC())
-	// 		pulang := GetTimePulang(karyawan)
-	// 		selisihpulangcepat := SelisihJamPulangCepat(karyawan)
-	// 		selisihjampulanglama := SelisihJamPulang(karyawan)
-
-	// 		if int(aktifjamkerja.Hours()) >= karyawan.Jam_kerja[0].Durasi {
-	// 			// Melebihi durasi jam kerja, bisa melakukan presensi pulang
-	// 			id := InsertPresensi(Info, Message, "pulang", mongoconn)
-	// 			if waktu < pulang {
-	// 				MessagePulangKerjaCepat(karyawan, aktifjamkerja, id, lokasi, selisihpulangcepat, Info, whatsapp)
-	// 			} else if waktu > pulang {
-	// 				MessagePulangLebihLama(karyawan, aktifjamkerja, id, lokasi, selisihjampulanglama, Info, whatsapp)
-	// 			} else {
-	// 				MessagePulangKerja(karyawan, aktifjamkerja, id, lokasi, Info, whatsapp)
-	// 			}
+	// 	// Ganti kondisi di bawah ini
+	// 	if int(aktifjamkerja.Hours()) >= karyawan.Jam_kerja[0].Durasi || !presensihariini.ID.IsZero() {
+	// 		id := InsertPresensi(Info, Message, "pulang", mongoconn)
+	// 		if waktu < pulang {
+	// 			MessagePulangKerjaCepat(karyawan, aktifjamkerja, id, lokasi, selisihpulangcepat, Info, whatsapp)
+	// 		} else if waktu > pulang {
+	// 			MessagePulangLebihLama(karyawan, aktifjamkerja, id, lokasi, selisihpulang, Info, whatsapp)
 	// 		} else {
-	// 			// Belum melebihi durasi jam kerja, tidak bisa presensi pulang
-	// 			MessageJamKerja(karyawan, aktifjamkerja, presensihariini, Info, whatsapp)
+	// 			MessagePulangKerja(karyawan, aktifjamkerja, id, lokasi, Info, whatsapp)
 	// 		}
+	// 	} else {
+	// 		MessageJamKerja(karyawan, aktifjamkerja, presensihariini, Info, whatsapp)
 	// 	}
 	// } else {
-	// 	// Kondisi saat belum ada presensi hari ini
 	// 	waktu := GetTimeSekarang(karyawan)
 	// 	masuk := GetTimeKerja(karyawan)
 	// 	if waktu < masuk {
@@ -204,7 +142,7 @@ func hadirHandler(Info *types.MessageInfo, Message *waProto.Message, lokasi stri
 	// 		MessageMasukKerja(karyawan, id, lokasi, Info, whatsapp)
 	// 	}
 	// }
-
+	// END YANG BENAR
 }
 
 func SelisihJamMasuk(karyawan Karyawan) (selisihJamFormatted string) {
