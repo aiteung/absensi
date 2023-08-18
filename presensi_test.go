@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"testing"
+	"time"
 
 	"github.com/aiteung/atdb"
 	_ "github.com/mattn/go-sqlite3"
@@ -49,11 +50,19 @@ var Msg = waProto.Message{
 // 	Handler(&Pesan, &Msg, &client, MongoConn)
 // }
 
-func TestSelisih(t *testing.T) {
-	Pesan.Sender.User = "6289522910966"
-	karyawan := getKaryawanFromPhoneNumber(MongoConn, Pesan.Sender.User)
-	cekhadir := SelisihJamPulangCepat(karyawan)
-	fmt.Println(cekhadir)
+// func TestSelisih(t *testing.T) {
+// 	Pesan.Sender.User = "6289522910966"
+// 	karyawan := getKaryawanFromPhoneNumber(MongoConn, Pesan.Sender.User)
+// 	cekhadir := SelisihJamPulangCepat(karyawan)
+// 	fmt.Println(cekhadir)
+// }
+
+func TestDurasi(t *testing.T) {
+	start := time.Date(2023, time.August, 18, 9, 0, 0, 0, time.UTC)
+	end := time.Date(2023, time.August, 18, 17, 30, 0, 0, time.UTC)
+
+	durasiFormatted := DurasiKerja(start, end)
+	fmt.Println("Durasi Kerja:", durasiFormatted)
 }
 
 // func TestGetPresensiThisMonth(t *testing.T) {

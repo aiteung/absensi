@@ -67,10 +67,10 @@ func MessagePulangKerja(karyawan Karyawan, aktifjamkerja time.Duration, id inter
 	atmessage.SendMessage(msg, Info.Sender, whatsapp)
 }
 
-func MessagePulangKerjaCepat(karyawan Karyawan, aktifjamkerja time.Duration, id interface{}, lokasi string, selisihpulang string, Info *types.MessageInfo, whatsapp *whatsmeow.Client) {
+func MessagePulangKerjaCepat(karyawan Karyawan, durasikerja string, id interface{}, lokasi string, selisihpulang string, Info *types.MessageInfo, whatsapp *whatsmeow.Client) {
 	msg := "*Pulang Kerja*\n"
 	msg = msg + "Hai kak _" + karyawan.Nama + "_,\ndari bagian *" + karyawan.Jabatan + "*, \nkakak pulang lebih cepat " + selisihpulang + "\nLokasi : _*" + lokasi + "*_\n"
-	msg = msg + fmt.Sprintf("\nID presensi pulang : %v", id) + "\n" + "Durasi Kerja : " + strings.Replace(aktifjamkerja.String(), "h", " jam ", 1)
+	msg = msg + fmt.Sprintf("\nID presensi pulang : %v", id) + "\n" + "Durasi Kerja : " + durasikerja
 	atmessage.SendMessage(msg, Info.Sender, whatsapp)
 }
 

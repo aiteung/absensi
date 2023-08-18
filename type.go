@@ -34,6 +34,18 @@ type Presensi struct { // input presensi, dimana pulang adalaha kewajiban 8 jam
 	Biodata      Karyawan           `bson:"biodata,omitempty"`
 }
 
+type Pulang struct { // input presensi, dimana pulang adalaha kewajiban 8 jam
+	ID           primitive.ObjectID `bson:"_id,omitempty"`
+	Longitude    float64            `bson:"longitude,omitempty"`
+	Latitude     float64            `bson:"latitude,omitempty"`
+	Location     string             `bson:"location,omitempty"`
+	Phone_number string             `bson:"phone_number,omitempty"`
+	Datetime     primitive.DateTime `bson:"datetime,omitempty"`
+	Checkin      string             `bson:"checkin,omitempty"`
+	Durasi       string             `bson:"durasi,omitempty"`
+	Biodata      Karyawan           `bson:"biodata,omitempty"`
+}
+
 type RekapPresensi struct {
 	ID            primitive.ObjectID `bson:"_id,omitempty"`
 	In            Presensi           `bson:"in,omitempty"`
