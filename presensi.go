@@ -82,6 +82,7 @@ func tidakhadirHandler(Info *types.MessageInfo, Message *waProto.Message, whatsa
 func hadirHandler(Info *types.MessageInfo, Message *waProto.Message, lokasi string, whatsapp *whatsmeow.Client, mongoconn *mongo.Database) {
 	// CODE AWAL
 	presensihariini := getPresensiTodayFromPhoneNumber(mongoconn, Info.Sender.User)
+	presensipulanghariini := getPresensiPulangTodayFromPhoneNumber(mongoconn, Info.Sender.User)
 	durasikerja := DurasiKerja(presensihariini.ID.Timestamp(), time.Now().UTC())
 	karyawan := getKaryawanFromPhoneNumber(mongoconn, Info.Sender.User)
 	waktu := GetTimeSekarang(karyawan)
@@ -96,15 +97,17 @@ func hadirHandler(Info *types.MessageInfo, Message *waProto.Message, lokasi stri
 		fmt.Println(presensihariini)
 		aktifjamkerja := time.Now().UTC().Sub(presensihariini.ID.Timestamp().UTC())
 		fmt.Println(aktifjamkerja)
-		if int(aktifjamkerja.Hours()) >= karyawan.Jam_kerja[0].Durasi && waktu < pulang {
+		if int(aktifjamkerja.Hours()) >= karyawan.Jam_kerja[0].Durasi && waktu < pulang && reflect.ValueOf(presensipulanghariini).IsZero() {
 			id := InsertPresensiPulang(Info, Message, "pulang", durasikerja, mongoconn)
 			MessagePulangKerjaCepat(karyawan, durasikerja, id, lokasi, selisihpulangcepat, Info, whatsapp)
-		} else if int(aktifjamkerja.Hours()) >= karyawan.Jam_kerja[0].Durasi && waktu >= pulang {
+		} else if int(aktifjamkerja.Hours()) >= karyawan.Jam_kerja[0].Durasi && waktu > pulang && reflect.ValueOf(presensipulanghariini).IsZero() {
 			id := InsertPresensi(Info, Message, "pulang", mongoconn)
 			MessagePulangLebihLama(karyawan, aktifjamkerja, id, lokasi, selisihpulang, Info, whatsapp)
-		} else if int(aktifjamkerja.Hours()) >= karyawan.Jam_kerja[0].Durasi && waktu == pulang {
+		} else if int(aktifjamkerja.Hours()) >= karyawan.Jam_kerja[0].Durasi && waktu == pulang && reflect.ValueOf(presensipulanghariini).IsZero() {
 			id := InsertPresensi(Info, Message, "pulang", mongoconn)
 			MessagePulangKerja(karyawan, aktifjamkerja, id, lokasi, Info, whatsapp)
+		} else if !reflect.ValueOf(presensipulanghariini).IsZero() {
+			MessagePresensiSudahPulang(karyawan, Info, whatsapp)
 		} else {
 			MessageJamKerja(karyawan, aktifjamkerja, presensihariini, Info, whatsapp)
 		}
@@ -284,6 +287,25 @@ func SelisihJamPulang(karyawan Karyawan) (selisihJamFormatted string) {
 	selisihJam = strings.Replace(selisihJam, "s", " detik ", 1)
 	fmt.Println("Final Selisih Jam Pulang :", selisihJam)
 	return selisihJam
+}
+
+func NewSelisihPulangCepat(karyawan Karyawan) string {
+	jam := strings.Replace(karyawan.Jam_kerja[0].Jam_keluar, ".", ":", 1)
+
+	location, _ := time.LoadLocation("Asia/Jakarta")
+	jamKeluar, _ := time.Parse("15:04", jam)
+
+	waktuSekarang := time.Now().In(location)
+	formatjam, _ := time.Parse("15:04", waktuSekarang.Format("15:04"))
+
+	selisihDuration := jamKeluar.Sub(formatjam)
+
+	hours := int(selisihDuration.Hours())
+	minutes := int(selisihDuration.Minutes()) % 60
+	seconds := int(selisihDuration.Seconds()) % 60
+
+	selisihFormatted := fmt.Sprintf("%d Jam %d Menit %d Detik", hours, minutes, seconds)
+	return selisihFormatted
 }
 
 func SelisihJamPulangCepat(karyawan Karyawan) (selisihJamFormatted string) {

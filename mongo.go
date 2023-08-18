@@ -120,6 +120,19 @@ func getPresensiTodayFromPhoneNumber(mongoconn *mongo.Database, phone_number str
 	return presensi
 }
 
+func getPresensiPulangTodayFromPhoneNumber(mongoconn *mongo.Database, phone_number string) (pulang Pulang) {
+	coll := mongoconn.Collection("presensi_pulang")
+	today := bson.M{
+		"$gte": primitive.NewDateTimeFromTime(time.Now().Truncate(24 * time.Hour).UTC()),
+	}
+	filter := bson.M{"phone_number": phone_number, "datetime": today}
+	err := coll.FindOne(context.TODO(), filter).Decode(&pulang)
+	if err != nil {
+		fmt.Printf("getPresensiTodayFromPhoneNumber: %v\n", err)
+	}
+	return pulang
+}
+
 func InsertPresensi(Info *types.MessageInfo, Message *waProto.Message, Checkin string, mongoconn *mongo.Database) (InsertedID interface{}) {
 	insertResult, err := mongoconn.Collection("presensi").InsertOne(context.TODO(), fillStructPresensi(Info, Message, Checkin, mongoconn))
 	if err != nil {
