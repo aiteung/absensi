@@ -289,25 +289,6 @@ func SelisihJamPulang(karyawan Karyawan) (selisihJamFormatted string) {
 	return selisihJam
 }
 
-func NewSelisihPulangCepat(karyawan Karyawan) string {
-	jam := strings.Replace(karyawan.Jam_kerja[0].Jam_keluar, ".", ":", 1)
-
-	location, _ := time.LoadLocation("Asia/Jakarta")
-	jamKeluar, _ := time.Parse("15:04", jam)
-
-	waktuSekarang := time.Now().In(location)
-	formatjam, _ := time.Parse("15:04", waktuSekarang.Format("15:04"))
-
-	selisihDuration := jamKeluar.Sub(formatjam)
-
-	hours := int(selisihDuration.Hours())
-	minutes := int(selisihDuration.Minutes()) % 60
-	seconds := int(selisihDuration.Seconds()) % 60
-
-	selisihFormatted := fmt.Sprintf("%d Jam %d Menit %d Detik", hours, minutes, seconds)
-	return selisihFormatted
-}
-
 func SelisihJamPulangCepat(karyawan Karyawan) (selisihJamFormatted string) {
 	// Replace 10.00 ke 10:00
 	jam := strings.Replace(karyawan.Jam_kerja[0].Jam_keluar, ".", ":", 1)

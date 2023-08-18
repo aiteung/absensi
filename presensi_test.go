@@ -54,7 +54,7 @@ var Msg = waProto.Message{
 func TestSelisih(t *testing.T) {
 	Pesan.Sender.User = "6285722697918"
 	karyawan := getKaryawanFromPhoneNumber(MongoConn, Pesan.Sender.User)
-	cekhadir := NewSelisihPulangCepat(karyawan)
+	cekhadir := SelisihJamMasuk(karyawan)
 	fmt.Println(cekhadir)
 }
 
