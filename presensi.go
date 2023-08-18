@@ -83,17 +83,39 @@ func hadirHandler(Info *types.MessageInfo, Message *waProto.Message, lokasi stri
 	// CODE AWAL
 	presensihariini := getPresensiTodayFromPhoneNumber(mongoconn, Info.Sender.User)
 	karyawan := getKaryawanFromPhoneNumber(mongoconn, Info.Sender.User)
+	waktu := GetTimeSekarang(karyawan)
+	pulang := GetTimePulang(karyawan)
+	selisihpulangcepat := SelisihJamPulangCepat(karyawan)
+	selisihpulang := SelisihJamPulang(karyawan)
+	masuk := GetTimeKerja(karyawan)
+	selisihmasukcepat := SelisihJamMasukCepat(karyawan)
+	selisihmasuk := SelisihJamMasuk(karyawan)
 	fmt.Println(karyawan.Jam_kerja[0].Durasi)
 	if !reflect.ValueOf(presensihariini).IsZero() {
 		fmt.Println(presensihariini)
 		aktifjamkerja := time.Now().UTC().Sub(presensihariini.ID.Timestamp().UTC())
 		fmt.Println(aktifjamkerja)
-		if int(aktifjamkerja.Hours()) >= karyawan.Jam_kerja[0].Durasi {
+		if int(aktifjamkerja.Hours()) >= karyawan.Jam_kerja[0].Durasi && waktu <= pulang {
+			id := InsertPresensi(Info, Message, "pulang", mongoconn)
+			MessagePulangKerjaCepat(karyawan, aktifjamkerja, id, lokasi, selisihpulangcepat, Info, whatsapp)
+		} else if int(aktifjamkerja.Hours()) >= karyawan.Jam_kerja[0].Durasi && waktu >= pulang {
+			id := InsertPresensi(Info, Message, "pulang", mongoconn)
+			MessagePulangKerjaCepat(karyawan, aktifjamkerja, id, lokasi, selisihpulang, Info, whatsapp)
+		} else if int(aktifjamkerja.Hours()) >= karyawan.Jam_kerja[0].Durasi && waktu == pulang {
 			id := InsertPresensi(Info, Message, "pulang", mongoconn)
 			MessagePulangKerja(karyawan, aktifjamkerja, id, lokasi, Info, whatsapp)
 		} else {
 			MessageJamKerja(karyawan, aktifjamkerja, presensihariini, Info, whatsapp)
 		}
+	} else if waktu <= masuk {
+		id := InsertPresensi(Info, Message, "masuk", mongoconn)
+		MessageMasukKerjaCepat(karyawan, id, lokasi, selisihmasukcepat, Info, whatsapp)
+	} else if waktu >= masuk {
+		id := InsertPresensi(Info, Message, "masuk", mongoconn)
+		MessageTerlambatKerja(karyawan, id, lokasi, selisihmasuk, Info, whatsapp)
+	} else if waktu == masuk {
+		id := InsertPresensi(Info, Message, "masuk", mongoconn)
+		MessageMasukKerjaTepatWaktu(karyawan, id, lokasi, Info, whatsapp)
 	} else {
 		id := InsertPresensi(Info, Message, "masuk", mongoconn)
 		MessageMasukKerja(karyawan, id, lokasi, Info, whatsapp)
