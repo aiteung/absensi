@@ -101,10 +101,10 @@ func hadirHandler(Info *types.MessageInfo, Message *waProto.Message, lokasi stri
 			id := InsertPresensiPulang(Info, Message, "pulang", durasikerja, mongoconn)
 			MessagePulangKerjaCepat(karyawan, durasikerja, id, lokasi, selisihpulangcepat, Info, whatsapp)
 		} else if int(aktifjamkerja.Hours()) >= karyawan.Jam_kerja[0].Durasi && waktu > pulang && reflect.ValueOf(presensipulanghariini).IsZero() {
-			id := InsertPresensi(Info, Message, "pulang", mongoconn)
+			id := InsertPresensiPulang(Info, Message, "pulang", durasikerja, mongoconn)
 			MessagePulangLebihLama(karyawan, aktifjamkerja, id, lokasi, selisihpulang, Info, whatsapp)
 		} else if int(aktifjamkerja.Hours()) >= karyawan.Jam_kerja[0].Durasi && waktu == pulang && reflect.ValueOf(presensipulanghariini).IsZero() {
-			id := InsertPresensi(Info, Message, "pulang", mongoconn)
+			id := InsertPresensiPulang(Info, Message, "pulang", durasikerja, mongoconn)
 			MessagePulangKerja(karyawan, aktifjamkerja, id, lokasi, Info, whatsapp)
 		} else if !reflect.ValueOf(presensipulanghariini).IsZero() {
 			MessagePresensiSudahPulang(karyawan, Info, whatsapp)
