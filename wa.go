@@ -60,24 +60,24 @@ func MessageJamKerja(karyawan Karyawan, aktifjamkerja time.Duration, presensihar
 	atmessage.SendMessage(msg, Info.Sender, whatsapp)
 }
 
-func MessagePulangKerja(karyawan Karyawan, aktifjamkerja time.Duration, id interface{}, lokasi string, Info *types.MessageInfo, whatsapp *whatsmeow.Client) {
+func MessagePulangKerja(karyawan Karyawan, durasikerja string, persentase string, id interface{}, lokasi string, Info *types.MessageInfo, whatsapp *whatsmeow.Client) {
 	msg := "*Pulang Kerja*\n"
 	msg = msg + "Hai kak _*" + karyawan.Nama + "*_,\ndari bagian *" + karyawan.Jabatan + "*, \nmakasih ya sudah melakukan presensi pulang kerja\nKakak pulang tepat waktu pada pukul 16.30\nLokasi : _*" + lokasi + "*_\n"
-	msg = msg + fmt.Sprintf("\nID presensi pulang : %v", id) + "\n" + "Durasi Kerja : " + strings.Replace(aktifjamkerja.String(), "h", " jam ", 1)
+	msg = msg + fmt.Sprintf("\nID presensi pulang : %v", id) + "\n" + "Durasi Kerja : " + durasikerja + "\n" + "Persentase Kerja : " + persentase
 	atmessage.SendMessage(msg, Info.Sender, whatsapp)
 }
 
-func MessagePulangKerjaCepat(karyawan Karyawan, durasikerja string, id interface{}, lokasi string, selisihpulang string, Info *types.MessageInfo, whatsapp *whatsmeow.Client) {
+func MessagePulangKerjaCepat(karyawan Karyawan, durasikerja string, persentase string, id interface{}, lokasi string, selisihpulang string, Info *types.MessageInfo, whatsapp *whatsmeow.Client) {
 	msg := "*Pulang Kerja*\n"
 	msg = msg + "Hai kak _" + karyawan.Nama + "_,\ndari bagian *" + karyawan.Jabatan + "*, \nkakak pulang lebih cepat " + selisihpulang + "\nLokasi : _*" + lokasi + "*_\n"
-	msg = msg + fmt.Sprintf("\nID presensi pulang : %v", id) + "\n" + "Durasi Kerja : " + durasikerja
+	msg = msg + fmt.Sprintf("\nID presensi pulang : %v", id) + "\n" + "Durasi Kerja : " + durasikerja + "\n" + "Persentase Kerja : " + persentase
 	atmessage.SendMessage(msg, Info.Sender, whatsapp)
 }
 
-func MessagePulangLebihLama(karyawan Karyawan, aktifjamkerja time.Duration, id interface{}, lokasi string, selisihpulang string, Info *types.MessageInfo, whatsapp *whatsmeow.Client) {
+func MessagePulangLebihLama(karyawan Karyawan, durasikerja string, persentase string, id interface{}, lokasi string, selisihpulang string, Info *types.MessageInfo, whatsapp *whatsmeow.Client) {
 	msg := "*Pulang Kerja*\n"
 	msg = msg + "Hai kak _" + karyawan.Nama + "_,\ndari bagian *" + karyawan.Jabatan + "*, \nkakak pulang lebih lama " + selisihpulang + "\nLokasi : _*" + lokasi + "*_\n"
-	msg = msg + fmt.Sprintf("\nID presensi pulang : %v", id) + "\n" + "Durasi Kerja : " + strings.Replace(aktifjamkerja.String(), "h", " jam ", 1)
+	msg = msg + fmt.Sprintf("\nID presensi pulang : %v", id) + "\n" + "Durasi Kerja : " + durasikerja + "\n" + "Persentase Kerja : " + persentase
 	atmessage.SendMessage(msg, Info.Sender, whatsapp)
 }
 
