@@ -113,14 +113,17 @@ func hadirHandler(Info *types.MessageInfo, Message *waProto.Message, lokasi stri
 			MessageJamKerja(karyawan, aktifjamkerja, presensihariini, Info, whatsapp)
 		}
 	} else if waktu < masuk {
-		id := InsertPresensi(Info, Message, "masuk", "Lebih Cepat", mongoconn)
-		MessageMasukKerjaCepat(karyawan, id, lokasi, selisihmasukcepat, Info, whatsapp)
+		keterangan := "Lebih Cepat"
+		id := InsertPresensi(Info, Message, "masuk", keterangan, mongoconn)
+		MessageMasukKerjaCepat(karyawan, id, lokasi, selisihmasukcepat, keterangan, Info, whatsapp)
 	} else if waktu > masuk {
-		id := InsertPresensi(Info, Message, "masuk", "Terlambat", mongoconn)
-		MessageTerlambatKerja(karyawan, id, lokasi, selisihmasuk, Info, whatsapp)
+		keterangan := "Terlambat"
+		id := InsertPresensi(Info, Message, "masuk", keterangan, mongoconn)
+		MessageTerlambatKerja(karyawan, id, lokasi, selisihmasuk, keterangan, Info, whatsapp)
 	} else {
-		id := InsertPresensi(Info, Message, "masuk", "Tepat Waktu", mongoconn)
-		MessageMasukKerjaTepatWaktu(karyawan, id, lokasi, Info, whatsapp)
+		keterangan := "Tepat Waktu"
+		id := InsertPresensi(Info, Message, "masuk", keterangan, mongoconn)
+		MessageMasukKerjaTepatWaktu(karyawan, id, lokasi, keterangan, Info, whatsapp)
 	}
 	// END CODE AWAL
 
