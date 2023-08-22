@@ -133,8 +133,8 @@ func getPresensiPulangTodayFromPhoneNumber(mongoconn *mongo.Database, phone_numb
 	return pulang
 }
 
-func InsertPresensi(Info *types.MessageInfo, Message *waProto.Message, Checkin string, mongoconn *mongo.Database) (InsertedID interface{}) {
-	insertResult, err := mongoconn.Collection("presensi").InsertOne(context.TODO(), fillStructPresensi(Info, Message, Checkin, mongoconn))
+func InsertPresensi(Info *types.MessageInfo, Message *waProto.Message, Checkin string, Keterangan string, mongoconn *mongo.Database) (InsertedID interface{}) {
+	insertResult, err := mongoconn.Collection("presensi").InsertOne(context.TODO(), fillStructPresensi(Info, Message, Checkin, Keterangan, mongoconn))
 	if err != nil {
 		fmt.Printf("InsertOneDoc: %v\n", err)
 	}

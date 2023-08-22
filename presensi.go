@@ -112,18 +112,15 @@ func hadirHandler(Info *types.MessageInfo, Message *waProto.Message, lokasi stri
 		} else {
 			MessageJamKerja(karyawan, aktifjamkerja, presensihariini, Info, whatsapp)
 		}
-	} else if waktu <= masuk {
-		id := InsertPresensi(Info, Message, "masuk", mongoconn)
+	} else if waktu < masuk {
+		id := InsertPresensi(Info, Message, "masuk", "Lebih Cepat", mongoconn)
 		MessageMasukKerjaCepat(karyawan, id, lokasi, selisihmasukcepat, Info, whatsapp)
-	} else if waktu >= masuk {
-		id := InsertPresensi(Info, Message, "masuk", mongoconn)
+	} else if waktu > masuk {
+		id := InsertPresensi(Info, Message, "masuk", "Terlambat", mongoconn)
 		MessageTerlambatKerja(karyawan, id, lokasi, selisihmasuk, Info, whatsapp)
-	} else if waktu == masuk {
-		id := InsertPresensi(Info, Message, "masuk", mongoconn)
-		MessageMasukKerjaTepatWaktu(karyawan, id, lokasi, Info, whatsapp)
 	} else {
-		id := InsertPresensi(Info, Message, "masuk", mongoconn)
-		MessageMasukKerja(karyawan, id, lokasi, Info, whatsapp)
+		id := InsertPresensi(Info, Message, "masuk", "Tepat Waktu", mongoconn)
+		MessageMasukKerjaTepatWaktu(karyawan, id, lokasi, Info, whatsapp)
 	}
 	// END CODE AWAL
 
@@ -347,12 +344,13 @@ func GetTimePulang(karyawan Karyawan) (timePulangFormatted string) {
 	return jam
 }
 
-func fillStructPresensi(Info *types.MessageInfo, Message *waProto.Message, Checkin string, mongoconn *mongo.Database) (presensi Presensi) {
+func fillStructPresensi(Info *types.MessageInfo, Message *waProto.Message, Checkin string, Keterangan string, mongoconn *mongo.Database) (presensi Presensi) {
 	presensi.Latitude, presensi.Longitude = atmessage.GetLiveLoc(Message)
 	presensi.Location = GetLokasi(mongoconn, *Message.LiveLocationMessage.DegreesLongitude, *Message.LiveLocationMessage.DegreesLatitude)
 	presensi.Phone_number = Info.Sender.User
 	presensi.Datetime = primitive.NewDateTimeFromTime(time.Now().UTC())
 	presensi.Checkin = Checkin
+	presensi.Keterangan = Keterangan
 	presensi.Biodata = GetBiodataFromPhoneNumber(mongoconn, Info.Sender.User)
 	return presensi
 }

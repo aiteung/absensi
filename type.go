@@ -31,6 +31,7 @@ type Presensi struct { // input presensi, dimana pulang adalaha kewajiban 8 jam
 	Phone_number string             `bson:"phone_number,omitempty"`
 	Datetime     primitive.DateTime `bson:"datetime,omitempty"`
 	Checkin      string             `bson:"checkin,omitempty"`
+	Keterangan   string             `bson:"ket,omitempty"`
 	Biodata      Karyawan           `bson:"biodata,omitempty"`
 }
 
