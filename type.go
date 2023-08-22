@@ -43,6 +43,7 @@ type Pulang struct { // input presensi, dimana pulang adalaha kewajiban 8 jam
 	Datetime     primitive.DateTime `bson:"datetime,omitempty"`
 	Checkin      string             `bson:"checkin,omitempty"`
 	Durasi       string             `bson:"durasi,omitempty"`
+	Persentase   string             `bson:"persentase,omitempty"`
 	Biodata      Karyawan           `bson:"biodata,omitempty"`
 }
 

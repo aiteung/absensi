@@ -83,7 +83,8 @@ func hadirHandler(Info *types.MessageInfo, Message *waProto.Message, lokasi stri
 	// CODE AWAL
 	presensihariini := getPresensiTodayFromPhoneNumber(mongoconn, Info.Sender.User)
 	presensipulanghariini := getPresensiPulangTodayFromPhoneNumber(mongoconn, Info.Sender.User)
-	durasikerja := DurasiKerja(presensihariini.ID.Timestamp(), time.Now().UTC())
+	durasikerja, persentasekerja := DurasiKerja(time.Now().UTC().Sub(presensihariini.ID.Timestamp()), presensihariini.ID.Timestamp(), time.Now().UTC())
+	// durasikerja := DurasiKerja(time.Now().UTC().Sub(presensihariini.ID.Timestamp()), presensihariini.ID.Timestamp(), time.Now().UTC())
 	karyawan := getKaryawanFromPhoneNumber(mongoconn, Info.Sender.User)
 	waktu := GetTimeSekarang(karyawan)
 	pulang := GetTimePulang(karyawan)
@@ -97,14 +98,14 @@ func hadirHandler(Info *types.MessageInfo, Message *waProto.Message, lokasi stri
 		fmt.Println(presensihariini)
 		aktifjamkerja := time.Now().UTC().Sub(presensihariini.ID.Timestamp().UTC())
 		fmt.Println(aktifjamkerja)
-		if int(aktifjamkerja.Hours()) >= karyawan.Jam_kerja[0].Durasi && waktu < pulang && reflect.ValueOf(presensipulanghariini).IsZero() {
-			id := InsertPresensiPulang(Info, Message, "pulang", durasikerja, mongoconn)
+		if waktu < pulang && reflect.ValueOf(presensipulanghariini).IsZero() {
+			id := InsertPresensiPulang(Info, Message, "pulang", durasikerja, persentasekerja, mongoconn)
 			MessagePulangKerjaCepat(karyawan, durasikerja, id, lokasi, selisihpulangcepat, Info, whatsapp)
-		} else if int(aktifjamkerja.Hours()) >= karyawan.Jam_kerja[0].Durasi && waktu > pulang && reflect.ValueOf(presensipulanghariini).IsZero() {
-			id := InsertPresensiPulang(Info, Message, "pulang", durasikerja, mongoconn)
+		} else if waktu > pulang && reflect.ValueOf(presensipulanghariini).IsZero() {
+			id := InsertPresensiPulang(Info, Message, "pulang", durasikerja, persentasekerja, mongoconn)
 			MessagePulangLebihLama(karyawan, aktifjamkerja, id, lokasi, selisihpulang, Info, whatsapp)
-		} else if int(aktifjamkerja.Hours()) >= karyawan.Jam_kerja[0].Durasi && waktu == pulang && reflect.ValueOf(presensipulanghariini).IsZero() {
-			id := InsertPresensiPulang(Info, Message, "pulang", durasikerja, mongoconn)
+		} else if waktu == pulang && reflect.ValueOf(presensipulanghariini).IsZero() {
+			id := InsertPresensiPulang(Info, Message, "pulang", durasikerja, persentasekerja, mongoconn)
 			MessagePulangKerja(karyawan, aktifjamkerja, id, lokasi, Info, whatsapp)
 		} else if !reflect.ValueOf(presensipulanghariini).IsZero() {
 			MessagePresensiSudahPulang(karyawan, Info, whatsapp)
@@ -171,7 +172,7 @@ func hadirHandler(Info *types.MessageInfo, Message *waProto.Message, lokasi stri
 	// END YANG BENAR
 }
 
-func DurasiKerja(start time.Time, end time.Time) string {
+func DurasiKerja(durasi time.Duration, start time.Time, end time.Time) (string, string) {
 	aktifjamkerja := end.Sub(start)
 
 	loc, _ := time.LoadLocation("Asia/Jakarta")
@@ -179,12 +180,16 @@ func DurasiKerja(start time.Time, end time.Time) string {
 
 	aktifjamkerja = endInJakarta.Sub(start)
 
+	totalMinutes := aktifjamkerja.Minutes()
+	percentageOfWork := (totalMinutes / (8*60 + 30)) * 100
+
 	hours := int(aktifjamkerja.Hours())
 	minutes := int(aktifjamkerja.Minutes()) % 60
 	seconds := int(aktifjamkerja.Seconds()) % 60
 
 	durasiFormatted := fmt.Sprintf("%d Jam %d Menit %d Detik", hours, minutes, seconds)
-	return durasiFormatted
+	percentageFormatted := fmt.Sprintf("%.2f%%", percentageOfWork)
+	return durasiFormatted, percentageFormatted
 }
 
 func SelisihJamMasuk(karyawan Karyawan) (selisihJamFormatted string) {
@@ -352,13 +357,14 @@ func fillStructPresensi(Info *types.MessageInfo, Message *waProto.Message, Check
 	return presensi
 }
 
-func fillStructPresensiPulang(Info *types.MessageInfo, Message *waProto.Message, Checkin string, Durasi string, mongoconn *mongo.Database) (pulang Pulang) {
+func fillStructPresensiPulang(Info *types.MessageInfo, Message *waProto.Message, Checkin string, Durasi string, Persentase string, mongoconn *mongo.Database) (pulang Pulang) {
 	pulang.Latitude, pulang.Longitude = atmessage.GetLiveLoc(Message)
 	pulang.Location = GetLokasi(mongoconn, *Message.LiveLocationMessage.DegreesLongitude, *Message.LiveLocationMessage.DegreesLatitude)
 	pulang.Phone_number = Info.Sender.User
 	pulang.Datetime = primitive.NewDateTimeFromTime(time.Now().UTC())
 	pulang.Checkin = Checkin
 	pulang.Durasi = Durasi
+	pulang.Persentase = Persentase
 	pulang.Biodata = GetBiodataFromPhoneNumber(mongoconn, Info.Sender.User)
 	return pulang
 }

@@ -141,8 +141,8 @@ func InsertPresensi(Info *types.MessageInfo, Message *waProto.Message, Checkin s
 	return insertResult.InsertedID
 }
 
-func InsertPresensiPulang(Info *types.MessageInfo, Message *waProto.Message, Checkin string, Durasi string, mongoconn *mongo.Database) (InsertedID interface{}) {
-	insertResult, err := mongoconn.Collection("presensi_pulang").InsertOne(context.TODO(), fillStructPresensiPulang(Info, Message, Checkin, Durasi, mongoconn))
+func InsertPresensiPulang(Info *types.MessageInfo, Message *waProto.Message, Checkin string, Durasi string, Persentase string, mongoconn *mongo.Database) (InsertedID interface{}) {
+	insertResult, err := mongoconn.Collection("presensi_pulang").InsertOne(context.TODO(), fillStructPresensiPulang(Info, Message, Checkin, Durasi, Persentase, mongoconn))
 	if err != nil {
 		fmt.Printf("InsertOneDoc: %v\n", err)
 	}

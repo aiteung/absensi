@@ -5,7 +5,7 @@ import (
 	"os"
 	"testing"
 
-	// "time"
+	"time"
 
 	"github.com/aiteung/atdb"
 	_ "github.com/mattn/go-sqlite3"
@@ -51,19 +51,34 @@ var Msg = waProto.Message{
 // 	Handler(&Pesan, &Msg, &client, MongoConn)
 // }
 
-func TestSelisih(t *testing.T) {
-	Pesan.Sender.User = "6285722697918"
-	karyawan := getKaryawanFromPhoneNumber(MongoConn, Pesan.Sender.User)
-	cekhadir := SelisihJamMasuk(karyawan)
-	fmt.Println(cekhadir)
+// func TestSelisih(t *testing.T) {
+// 	Pesan.Sender.User = "6285722697918"
+// 	karyawan := getKaryawanFromPhoneNumber(MongoConn, Pesan.Sender.User)
+// 	cekhadir := SelisihJamMasuk(karyawan)
+// 	fmt.Println(cekhadir)
+// }
+
+func TestDurasi(t *testing.T) {
+	start := time.Date(2023, time.August, 22, 9, 0, 0, 0, time.UTC)
+	end := time.Date(2023, time.August, 22, 17, 30, 0, 0, time.UTC)
+	durasi := end.Sub(start)
+
+	durasiFormatted, percentageFormatted := DurasiKerja(durasi, start, end)
+
+	fmt.Println("Durasi Kerja:", durasiFormatted)
+	fmt.Println("Persentase Kerja:", percentageFormatted)
 }
 
-// func TestDurasi(t *testing.T) {
-// 	start := time.Date(2023, time.August, 18, 9, 0, 0, 0, time.UTC)
-// 	end := time.Date(2023, time.August, 18, 17, 30, 0, 0, time.UTC)
+// func TestPersentase(t *testing.T) {
+// 	start := time.Date(2023, time.August, 22, 9, 0, 0, 0, time.UTC)
+// 	end := time.Date(2023, time.August, 22, 17, 30, 0, 0, time.UTC)
 
-// 	durasiFormatted := DurasiKerja(start, end)
-// 	fmt.Println("Durasi Kerja:", durasiFormatted)
+// 	durasiKerja := DurasiKerja(start, end)
+// 	fmt.Println("Durasi Kerja:", durasiKerja)
+
+// 	aktifjamkerja := end.Sub(start)
+// 	persentase := PersentaseKerja(aktifjamkerja)
+// 	fmt.Printf("Persentase Kerja: %.2f%%\n", persentase)
 // }
 
 // func TestGetPresensiThisMonth(t *testing.T) {
