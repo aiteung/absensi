@@ -51,7 +51,7 @@ func MessageMasukKerja(karyawan Karyawan, id interface{}, lokasi string, Info *t
 }
 
 func MessagePresensiSudahPulang(karyawan Karyawan, Info *types.MessageInfo, whatsapp *whatsmeow.Client) {
-	msg := "*Masuk Kerja*\n"
+	msg := "*Keterangan*\n"
 	msg = msg + "Hai kak _*" + karyawan.Nama + "*_,\ndari bagian *" + karyawan.Jabatan + "*, \nkakak sudah melakukan presensi pulang\nSilahkan presensi masuk lagi pada hari esok beserta presensi pulang nya\nSampai ketemu lagi di esok harii...\n"
 	atmessage.SendMessage(msg, Info.Sender, whatsapp)
 }

@@ -45,6 +45,7 @@ type Pulang struct { // input presensi, dimana pulang adalaha kewajiban 8 jam
 	Checkin      string             `bson:"checkin,omitempty"`
 	Durasi       string             `bson:"durasi,omitempty"`
 	Persentase   string             `bson:"persentase,omitempty"`
+	Keterangan   string             `bson:"ket,omitempty"`
 	Biodata      Karyawan           `bson:"biodata,omitempty"`
 }
 

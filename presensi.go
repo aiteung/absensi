@@ -99,13 +99,16 @@ func hadirHandler(Info *types.MessageInfo, Message *waProto.Message, lokasi stri
 		aktifjamkerja := time.Now().UTC().Sub(presensihariini.ID.Timestamp().UTC())
 		fmt.Println(aktifjamkerja)
 		if waktu < pulang && reflect.ValueOf(presensipulanghariini).IsZero() {
-			id := InsertPresensiPulang(Info, Message, "pulang", durasikerja, persentasekerja, mongoconn)
+			keterangan := "Lebih Cepat"
+			id := InsertPresensiPulang(Info, Message, "pulang", keterangan, durasikerja, persentasekerja, mongoconn)
 			MessagePulangKerjaCepat(karyawan, durasikerja, persentasekerja, id, lokasi, selisihpulangcepat, Info, whatsapp)
 		} else if waktu > pulang && reflect.ValueOf(presensipulanghariini).IsZero() {
-			id := InsertPresensiPulang(Info, Message, "pulang", durasikerja, persentasekerja, mongoconn)
+			keterangan := "Lebih Lama"
+			id := InsertPresensiPulang(Info, Message, "pulang", keterangan, durasikerja, persentasekerja, mongoconn)
 			MessagePulangLebihLama(karyawan, durasikerja, persentasekerja, id, lokasi, selisihpulang, Info, whatsapp)
 		} else if waktu == pulang && reflect.ValueOf(presensipulanghariini).IsZero() {
-			id := InsertPresensiPulang(Info, Message, "pulang", durasikerja, persentasekerja, mongoconn)
+			keterangan := "Tepat Waktu"
+			id := InsertPresensiPulang(Info, Message, "pulang", keterangan, durasikerja, persentasekerja, mongoconn)
 			MessagePulangKerja(karyawan, durasikerja, persentasekerja, id, lokasi, Info, whatsapp)
 		} else if !reflect.ValueOf(presensipulanghariini).IsZero() {
 			MessagePresensiSudahPulang(karyawan, Info, whatsapp)
@@ -358,12 +361,13 @@ func fillStructPresensi(Info *types.MessageInfo, Message *waProto.Message, Check
 	return presensi
 }
 
-func fillStructPresensiPulang(Info *types.MessageInfo, Message *waProto.Message, Checkin string, Durasi string, Persentase string, mongoconn *mongo.Database) (pulang Pulang) {
+func fillStructPresensiPulang(Info *types.MessageInfo, Message *waProto.Message, Checkin string, Keterangan string, Durasi string, Persentase string, mongoconn *mongo.Database) (pulang Pulang) {
 	pulang.Latitude, pulang.Longitude = atmessage.GetLiveLoc(Message)
 	pulang.Location = GetLokasi(mongoconn, *Message.LiveLocationMessage.DegreesLongitude, *Message.LiveLocationMessage.DegreesLatitude)
 	pulang.Phone_number = Info.Sender.User
 	pulang.Datetime = primitive.NewDateTimeFromTime(time.Now().UTC())
 	pulang.Checkin = Checkin
+	pulang.Keterangan = Keterangan
 	pulang.Durasi = Durasi
 	pulang.Persentase = Persentase
 	pulang.Biodata = GetBiodataFromPhoneNumber(mongoconn, Info.Sender.User)
