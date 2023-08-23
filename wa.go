@@ -83,7 +83,7 @@ func MessagePulangLebihLama(karyawan Karyawan, durasikerja string, persentase st
 	msg := "*Pulang Kerja*\n"
 	msg = msg + "Hai kak _" + karyawan.Nama + "_,\ndari bagian *" + karyawan.Jabatan + "*, \nkakak pulang lebih lama " + selisihpulang + "\nLokasi : _*" + lokasi + "*_\n"
 	msg = msg + fmt.Sprintf("\nID presensi pulang : %v", id) + "\n" + "Durasi Kerja : " + durasikerja + "\n" + "Persentase Kerja : " + persentase + "\n"
-	msg = msg + fmt.Sprintf("Keterangan Masuk : *%s*\n", keterangan)
+	msg = msg + fmt.Sprintf("Keterangan Pulang : *%s*\n", keterangan)
 	atmessage.SendMessage(msg, Info.Sender, whatsapp)
 }
 
