@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/aiteung/atmessage"
+	"github.com/aiteung/module/model"
 	"github.com/aiteung/musik"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -16,16 +17,16 @@ import (
 	"go.mau.fi/whatsmeow/types"
 )
 
-const Keyword string = "adorable"
+const Keyword string = "ulbi"
 
-func Handler(Info *types.MessageInfo, Message *waProto.Message, whatsapp *whatsmeow.Client, mongoconn *mongo.Database) {
-	if Message.LiveLocationMessage != nil {
-		LiveLocationMessage(Info, Message, whatsapp, mongoconn)
-	} else if Message.ButtonsResponseMessage != nil {
-		ButtonMessage(Info, Message, whatsapp)
+func Handler(Pesan model.IteungMessage, mongoconn *mongo.Database) (reply string) {
+	lokasi := GetLokasi(mongoconn, Pesan.Longitude, Pesan.Latitude)
+	if lokasi != "" {
+		reply = hadirHandler(Pesan, lokasi, mongoconn)
 	} else {
-		MultiKey(mongoconn, Info, Message, whatsapp)
+		reply = tidakhadirHandler(Pesan, mongoconn)
 	}
+	return
 }
 
 func MultiKey(mongoconn *mongo.Database, Info *types.MessageInfo, Message *waProto.Message, whatsapp *whatsmeow.Client) {
@@ -63,29 +64,18 @@ func ButtonMessage(Info *types.MessageInfo, Message *waProto.Message, whatsapp *
 	atmessage.SendMessage(msg, Info.Sender, whatsapp)
 }
 
-func LiveLocationMessage(Info *types.MessageInfo, Message *waProto.Message, whatsapp *whatsmeow.Client, mongoconn *mongo.Database) {
-	lokasi := GetLokasi(mongoconn, *Message.LiveLocationMessage.DegreesLongitude, *Message.LiveLocationMessage.DegreesLatitude)
-	if lokasi != "" {
-		hadirHandler(Info, Message, lokasi, whatsapp, mongoconn)
-	} else {
-		tidakhadirHandler(Info, Message, whatsapp, mongoconn)
-	}
-
+func tidakhadirHandler(Pesan model.IteungMessage, mongoconn *mongo.Database) string {
+	nama := GetNamaFromPhoneNumber(mongoconn, Pesan.Phone_number)
+	return MessageTidakMasukKerja(nama, Pesan.Longitude, Pesan.Latitude)
 }
 
-func tidakhadirHandler(Info *types.MessageInfo, Message *waProto.Message, whatsapp *whatsmeow.Client, mongoconn *mongo.Database) {
-	lat, long := atmessage.GetLiveLoc(Message)
-	nama := GetNamaFromPhoneNumber(mongoconn, Info.Sender.User)
-	MessageTidakMasukKerja(nama, long, lat, Info, whatsapp)
-}
-
-func hadirHandler(Info *types.MessageInfo, Message *waProto.Message, lokasi string, whatsapp *whatsmeow.Client, mongoconn *mongo.Database) {
+func hadirHandler(Pesan model.IteungMessage, lokasi string, mongoconn *mongo.Database) (msg string) {
 	// CODE AWAL
-	presensihariini := getPresensiTodayFromPhoneNumber(mongoconn, Info.Sender.User)
-	presensipulanghariini := getPresensiPulangTodayFromPhoneNumber(mongoconn, Info.Sender.User)
+	presensihariini := getPresensiTodayFromPhoneNumber(mongoconn, Pesan.Phone_number)
+	presensipulanghariini := getPresensiPulangTodayFromPhoneNumber(mongoconn, Pesan.Phone_number)
 	durasikerja, persentasekerja := DurasiKerja(time.Now().UTC().Sub(presensihariini.ID.Timestamp()), presensihariini.ID.Timestamp(), time.Now().UTC())
 	// durasikerja := DurasiKerja(time.Now().UTC().Sub(presensihariini.ID.Timestamp()), presensihariini.ID.Timestamp(), time.Now().UTC())
-	karyawan := getKaryawanFromPhoneNumber(mongoconn, Info.Sender.User)
+	karyawan := getKaryawanFromPhoneNumber(mongoconn, Pesan.Phone_number)
 	waktu := GetTimeSekarang(karyawan)
 	pulang := GetTimePulang(karyawan)
 	selisihpulangcepat := SelisihJamPulangCepat(karyawan)
@@ -100,79 +90,35 @@ func hadirHandler(Info *types.MessageInfo, Message *waProto.Message, lokasi stri
 		fmt.Println(aktifjamkerja)
 		if waktu < pulang && reflect.ValueOf(presensipulanghariini).IsZero() {
 			keterangan := "Lebih Cepat"
-			id := InsertPresensiPulang(Info, Message, "pulang", keterangan, durasikerja, persentasekerja, mongoconn)
-			MessagePulangKerjaCepat(karyawan, durasikerja, persentasekerja, keterangan, id, lokasi, selisihpulangcepat, Info, whatsapp)
+			id := InsertPresensiPulang(Pesan, "pulang", keterangan, durasikerja, persentasekerja, mongoconn)
+			msg = MessagePulangKerjaCepat(karyawan, durasikerja, persentasekerja, keterangan, id, lokasi, selisihpulangcepat)
 		} else if waktu > pulang && reflect.ValueOf(presensipulanghariini).IsZero() {
 			keterangan := "Lebih Lama"
-			id := InsertPresensiPulang(Info, Message, "pulang", keterangan, durasikerja, persentasekerja, mongoconn)
-			MessagePulangLebihLama(karyawan, durasikerja, persentasekerja, keterangan, id, lokasi, selisihpulang, Info, whatsapp)
+			id := InsertPresensiPulang(Pesan, "pulang", keterangan, durasikerja, persentasekerja, mongoconn)
+			msg = MessagePulangLebihLama(karyawan, durasikerja, persentasekerja, keterangan, id, lokasi, selisihpulang)
 		} else if waktu == pulang && reflect.ValueOf(presensipulanghariini).IsZero() {
 			keterangan := "Tepat Waktu"
-			id := InsertPresensiPulang(Info, Message, "pulang", keterangan, durasikerja, persentasekerja, mongoconn)
-			MessagePulangKerja(karyawan, durasikerja, persentasekerja, keterangan, id, lokasi, Info, whatsapp)
+			id := InsertPresensiPulang(Pesan, "pulang", keterangan, durasikerja, persentasekerja, mongoconn)
+			msg = MessagePulangKerja(karyawan, durasikerja, persentasekerja, keterangan, id, lokasi)
 		} else if !reflect.ValueOf(presensipulanghariini).IsZero() {
-			MessagePresensiSudahPulang(karyawan, Info, whatsapp)
+			msg = MessagePresensiSudahPulang(karyawan)
 		} else {
-			MessageJamKerja(karyawan, aktifjamkerja, presensihariini, Info, whatsapp)
+			msg = MessageJamKerja(karyawan, aktifjamkerja, presensihariini)
 		}
 	} else if waktu < masuk {
 		keterangan := "Lebih Cepat"
-		id := InsertPresensi(Info, Message, "masuk", keterangan, mongoconn)
-		MessageMasukKerjaCepat(karyawan, id, lokasi, selisihmasukcepat, keterangan, Info, whatsapp)
+		id := InsertPresensi(Pesan, "masuk", keterangan, mongoconn)
+		msg = MessageMasukKerjaCepat(karyawan, id, lokasi, selisihmasukcepat, keterangan)
 	} else if waktu > masuk {
 		keterangan := "Terlambat"
-		id := InsertPresensi(Info, Message, "masuk", keterangan, mongoconn)
-		MessageTerlambatKerja(karyawan, id, lokasi, selisihmasuk, keterangan, Info, whatsapp)
+		id := InsertPresensi(Pesan, "masuk", keterangan, mongoconn)
+		msg = MessageTerlambatKerja(karyawan, id, lokasi, selisihmasuk, keterangan)
 	} else {
 		keterangan := "Tepat Waktu"
-		id := InsertPresensi(Info, Message, "masuk", keterangan, mongoconn)
-		MessageMasukKerjaTepatWaktu(karyawan, id, lokasi, keterangan, Info, whatsapp)
+		id := InsertPresensi(Pesan, "masuk", keterangan, mongoconn)
+		msg = MessageMasukKerjaTepatWaktu(karyawan, id, lokasi, keterangan)
 	}
-	// END CODE AWAL
-
-	// YANG BENAR SUDAH BERJALAN
-	// presensihariini := getPresensiTodayFromPhoneNumber(mongoconn, Info.Sender.User)
-	// karyawan := getKaryawanFromPhoneNumber(mongoconn, Info.Sender.User)
-	// fmt.Println(karyawan.Jam_kerja[0].Durasi)
-	// if !reflect.ValueOf(presensihariini).IsZero() {
-	// 	fmt.Println(presensihariini)
-	// 	aktifjamkerja := time.Now().UTC().Sub(presensihariini.ID.Timestamp().UTC())
-	// 	fmt.Println(aktifjamkerja)
-	// 	waktu := GetTimeSekarang(karyawan)
-	// 	pulang := GetTimePulang(karyawan)
-	// 	selisihpulang := SelisihJamPulang(karyawan)
-	// 	selisihpulangcepat := SelisihJamPulangCepat(karyawan)
-
-	// 	// Ganti kondisi di bawah ini
-	// 	if int(aktifjamkerja.Hours()) >= karyawan.Jam_kerja[0].Durasi || !presensihariini.ID.IsZero() {
-	// 		id := InsertPresensi(Info, Message, "pulang", mongoconn)
-	// 		if waktu < pulang {
-	// 			MessagePulangKerjaCepat(karyawan, aktifjamkerja, id, lokasi, selisihpulangcepat, Info, whatsapp)
-	// 		} else if waktu > pulang {
-	// 			MessagePulangLebihLama(karyawan, aktifjamkerja, id, lokasi, selisihpulang, Info, whatsapp)
-	// 		} else {
-	// 			MessagePulangKerja(karyawan, aktifjamkerja, id, lokasi, Info, whatsapp)
-	// 		}
-	// 	} else {
-	// 		MessageJamKerja(karyawan, aktifjamkerja, presensihariini, Info, whatsapp)
-	// 	}
-	// } else {
-	// 	waktu := GetTimeSekarang(karyawan)
-	// 	masuk := GetTimeKerja(karyawan)
-	// 	if waktu < masuk {
-	// 		id := InsertPresensi(Info, Message, "masuk", mongoconn)
-	// 		selisihmasukcepat := SelisihJamMasukCepat(karyawan)
-	// 		MessageMasukKerjaCepat(karyawan, id, lokasi, selisihmasukcepat, Info, whatsapp)
-	// 	} else if waktu > masuk {
-	// 		id := InsertPresensi(Info, Message, "masuk", mongoconn)
-	// 		selisihmasuk := SelisihJamMasuk(karyawan)
-	// 		MessageTerlambatKerja(karyawan, id, lokasi, selisihmasuk, Info, whatsapp)
-	// 	} else {
-	// 		id := InsertPresensi(Info, Message, "masuk", mongoconn)
-	// 		MessageMasukKerja(karyawan, id, lokasi, Info, whatsapp)
-	// 	}
-	// }
-	// END YANG BENAR
+	return
 }
 
 func DurasiKerja(durasi time.Duration, start time.Time, end time.Time) (string, string) {
@@ -350,27 +296,29 @@ func GetTimePulang(karyawan Karyawan) (timePulangFormatted string) {
 	return jam
 }
 
-func fillStructPresensi(Info *types.MessageInfo, Message *waProto.Message, Checkin string, Keterangan string, mongoconn *mongo.Database) (presensi Presensi) {
-	presensi.Latitude, presensi.Longitude = atmessage.GetLiveLoc(Message)
-	presensi.Location = GetLokasi(mongoconn, *Message.LiveLocationMessage.DegreesLongitude, *Message.LiveLocationMessage.DegreesLatitude)
-	presensi.Phone_number = Info.Sender.User
+func fillStructPresensi(Pesan model.IteungMessage, Checkin string, Keterangan string, mongoconn *mongo.Database) (presensi Presensi) {
+	presensi.Latitude = Pesan.Latitude
+	presensi.Longitude = Pesan.Longitude
+	presensi.Location = GetLokasi(mongoconn, Pesan.Longitude, Pesan.Latitude)
+	presensi.Phone_number = Pesan.Phone_number
 	presensi.Datetime = primitive.NewDateTimeFromTime(time.Now().UTC())
 	presensi.Checkin = Checkin
 	presensi.Keterangan = Keterangan
-	presensi.Biodata = GetBiodataFromPhoneNumber(mongoconn, Info.Sender.User)
+	presensi.Biodata = GetBiodataFromPhoneNumber(mongoconn, Pesan.Phone_number)
 	return presensi
 }
 
-func fillStructPresensiPulang(Info *types.MessageInfo, Message *waProto.Message, Checkin string, Keterangan string, Durasi string, Persentase string, mongoconn *mongo.Database) (pulang Pulang) {
-	pulang.Latitude, pulang.Longitude = atmessage.GetLiveLoc(Message)
-	pulang.Location = GetLokasi(mongoconn, *Message.LiveLocationMessage.DegreesLongitude, *Message.LiveLocationMessage.DegreesLatitude)
-	pulang.Phone_number = Info.Sender.User
+func fillStructPresensiPulang(Pesan model.IteungMessage, Checkin string, Keterangan string, Durasi string, Persentase string, mongoconn *mongo.Database) (pulang Pulang) {
+	pulang.Latitude = Pesan.Latitude
+	pulang.Longitude = Pesan.Longitude
+	pulang.Location = GetLokasi(mongoconn, Pesan.Longitude, Pesan.Latitude)
+	pulang.Phone_number = Pesan.Phone_number
 	pulang.Datetime = primitive.NewDateTimeFromTime(time.Now().UTC())
 	pulang.Checkin = Checkin
 	pulang.Keterangan = Keterangan
 	pulang.Durasi = Durasi
 	pulang.Persentase = Persentase
-	pulang.Biodata = GetBiodataFromPhoneNumber(mongoconn, Info.Sender.User)
+	pulang.Biodata = GetBiodataFromPhoneNumber(mongoconn, Pesan.Phone_number)
 	return pulang
 }
 

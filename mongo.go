@@ -5,8 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	waProto "go.mau.fi/whatsmeow/binary/proto"
-	"go.mau.fi/whatsmeow/types"
+	"github.com/aiteung/module/model"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -133,16 +132,16 @@ func getPresensiPulangTodayFromPhoneNumber(mongoconn *mongo.Database, phone_numb
 	return pulang
 }
 
-func InsertPresensi(Info *types.MessageInfo, Message *waProto.Message, Checkin string, Keterangan string, mongoconn *mongo.Database) (InsertedID interface{}) {
-	insertResult, err := mongoconn.Collection("presensi").InsertOne(context.TODO(), fillStructPresensi(Info, Message, Checkin, Keterangan, mongoconn))
+func InsertPresensi(Pesan model.IteungMessage, Checkin string, Keterangan string, mongoconn *mongo.Database) (InsertedID interface{}) {
+	insertResult, err := mongoconn.Collection("presensi").InsertOne(context.TODO(), fillStructPresensi(Pesan, Checkin, Keterangan, mongoconn))
 	if err != nil {
 		fmt.Printf("InsertOneDoc: %v\n", err)
 	}
 	return insertResult.InsertedID
 }
 
-func InsertPresensiPulang(Info *types.MessageInfo, Message *waProto.Message, Checkin string, Keterangan string, Durasi string, Persentase string, mongoconn *mongo.Database) (InsertedID interface{}) {
-	insertResult, err := mongoconn.Collection("presensi_pulang").InsertOne(context.TODO(), fillStructPresensiPulang(Info, Message, Checkin, Keterangan, Durasi, Persentase, mongoconn))
+func InsertPresensiPulang(Pesan model.IteungMessage, Checkin string, Keterangan string, Durasi string, Persentase string, mongoconn *mongo.Database) (InsertedID interface{}) {
+	insertResult, err := mongoconn.Collection("presensi_pulang").InsertOne(context.TODO(), fillStructPresensiPulang(Pesan, Checkin, Keterangan, Durasi, Persentase, mongoconn))
 	if err != nil {
 		fmt.Printf("InsertOneDoc: %v\n", err)
 	}
