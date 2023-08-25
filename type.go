@@ -33,7 +33,7 @@ type Presensi struct {
 	Phone_number string             `bson:"phone_number" json:"phone_number"`
 	Checkin      string             `bson:"checkin" json:"checkin"`
 	Datetime     time.Time          `bson:"datetime,omitempty"`
-	Karyawan     Karyawan           `bson:"karyawan" json:"karyawan"`
+	Karyawan     Karyawan           `bson:"biodata" json:"biodata"`
 	Keterangan   string             `bson:"ket" json:"ket"`
 	Lampiran     string             `bson:"lampiran" json:"lampiran"`
 }
