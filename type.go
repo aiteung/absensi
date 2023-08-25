@@ -8,11 +8,11 @@ import (
 
 type Karyawan struct { //data karwayan unik
 	ID           primitive.ObjectID `bson:"_id,omitempty" json:"_id"`
-	Nama         string             `bson:"nama,omitempty" json:"nama"`
-	Phone_number string             `bson:"phone_number,omitempty" json:"phone_number"`
-	Jabatan      string             `bson:"jabatan,omitempty" json:"jabatan"`
-	Jam_kerja    []JamKerja         `bson:"jam_kerja,omitempty" json:"jam_kerja"`
-	Hari_kerja   []string           `bson:"hari_kerja,omitempty" json:"hari_kerja"`
+	Nama         string             `bson:"nama" json:"nama"`
+	Phone_number string             `bson:"phone_number" json:"phone_number"`
+	Jabatan      string             `bson:"jabatan" json:"jabatan"`
+	Jam_kerja    []JamKerja         `bson:"jam_kerja" json:"jam_kerja"`
+	Hari_kerja   []string           `bson:"hari_kerja" json:"hari_kerja"`
 }
 
 type JamKerja struct { //info tambahan dari karyawan
