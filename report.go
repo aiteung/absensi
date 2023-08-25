@@ -36,7 +36,7 @@ func GenerateReportCurrentMonth(MongoConn *mongo.Database, to types.JID, whatsap
 	}
 	for _, prn := range res {
 		waktuutc := prn.ID.Timestamp().In(location).String()
-		err = cw.Write([]string{waktuutc, prn.Location, prn.Phone_number, prn.Checkin, prn.Biodata.Nama, prn.Biodata.Jabatan})
+		err = cw.Write([]string{waktuutc, prn.Location, prn.Phone_number, prn.Checkin, prn.Karyawan.Nama, prn.Karyawan.Jabatan})
 		if err != nil {
 			atmessage.SendMessage("failed to write file", to, whatsapp)
 		}

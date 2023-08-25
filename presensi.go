@@ -303,7 +303,7 @@ func fillStructPresensi(Pesan model.IteungMessage, Checkin string, Keterangan st
 	presensi.Checkin = Checkin
 	presensi.Datetime = ConvertTimestampToJkt(time.Now())
 	presensi.Keterangan = Keterangan
-	presensi.Biodata = GetBiodataFromPhoneNumber(mongoconn, Pesan.Phone_number)
+	presensi.Karyawan = GetBiodataFromPhoneNumber(mongoconn, Pesan.Phone_number)
 	return presensi
 }
 
@@ -317,7 +317,7 @@ func fillStructPresensiPulang(Pesan model.IteungMessage, Checkin string, Keteran
 	pulang.Keterangan = Keterangan
 	pulang.Durasi = Durasi
 	pulang.Persentase = Persentase
-	pulang.Biodata = GetBiodataFromPhoneNumber(mongoconn, Pesan.Phone_number)
+	pulang.Karyawan = GetBiodataFromPhoneNumber(mongoconn, Pesan.Phone_number)
 	return pulang
 }
 

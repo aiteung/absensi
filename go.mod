@@ -10,6 +10,7 @@ require (
 	github.com/aiteung/module v0.0.21
 	github.com/aiteung/musik v0.0.5
 	github.com/mattn/go-sqlite3 v1.14.17
+	github.com/xuri/excelize/v2 v2.7.1
 	go.mau.fi/whatsmeow v0.0.0-20230817083005-1c185f033d88
 	go.mongodb.org/mongo-driver v1.11.6
 )
@@ -32,7 +33,6 @@ require (
 	github.com/xdg-go/scram v1.1.2 // indirect
 	github.com/xdg-go/stringprep v1.0.4 // indirect
 	github.com/xuri/efp v0.0.0-20220603152613-6918739fd470 // indirect
-	github.com/xuri/excelize/v2 v2.7.1 // indirect
 	github.com/xuri/nfp v0.0.0-20220409054826-5e722a1d9e22 // indirect
 	github.com/youmark/pkcs8 v0.0.0-20201027041543-1326539a0a0a // indirect
 	go.mau.fi/libsignal v0.1.0 // indirect

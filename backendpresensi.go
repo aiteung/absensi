@@ -211,7 +211,7 @@ func InsertDokumenTidakMasuk(db *mongo.Database, Id primitive.ObjectID, keterang
 	presensi.Latitude, presensi.Longitude = 0, 0
 	presensi.Location = "Tidak Ada"
 	// presensi.Checkin = Checkin
-	presensi.Biodata = GetBiodataFromId(db, Id)
+	presensi.Karyawan = GetBiodataFromId(db, Id)
 	presensi.Keterangan = keterangan
 	presensi.Lampiran = lampiran
 	return InsertOneDoc(db, "presensi", presensi), err
@@ -239,8 +239,8 @@ func ExportToExcel(data []Presensi, filename string) error {
 		waktuPresensi := ConvertTimestampToJkt(GetTimestampFromObjectID(presensi.ID))
 
 		f.SetCellValue("Sheet1", fmt.Sprintf("A%d", rowNum), waktuPresensi.Format("2006-01-02"))
-		f.SetCellValue("Sheet1", fmt.Sprintf("B%d", rowNum), presensi.Biodata.Nama)
-		f.SetCellValue("Sheet1", fmt.Sprintf("C%d", rowNum), presensi.Biodata.Jabatan)
+		f.SetCellValue("Sheet1", fmt.Sprintf("B%d", rowNum), presensi.Karyawan.Nama)
+		f.SetCellValue("Sheet1", fmt.Sprintf("C%d", rowNum), presensi.Karyawan.Jabatan)
 		f.SetCellValue("Sheet1", fmt.Sprintf("D%d", rowNum), waktuPresensi.Format("15:04"))
 		f.SetCellValue("Sheet1", fmt.Sprintf("E%d", rowNum), presensi.Checkin)
 		f.SetCellValue("Sheet1", fmt.Sprintf("F%d", rowNum), presensi.Keterangan)

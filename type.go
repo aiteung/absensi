@@ -7,12 +7,12 @@ import (
 )
 
 type Karyawan struct { //data karwayan unik
-	ID           primitive.ObjectID `bson:"_id,omitempty"`
-	Nama         string             `bson:"nama,omitempty"`
-	Phone_number string             `bson:"phone_number,omitempty"`
-	Jabatan      string             `bson:"jabatan,omitempty"`
-	Jam_kerja    []JamKerja         `bson:"jam_kerja,omitempty"`
-	Hari_kerja   []string           `bson:"hari_kerja,omitempty"`
+	ID           primitive.ObjectID `bson:"_id,omitempty" json:"_id"`
+	Nama         string             `bson:"nama,omitempty" json:"nama"`
+	Phone_number string             `bson:"phone_number,omitempty" json:"phone_number"`
+	Jabatan      string             `bson:"jabatan,omitempty" json:"jabatan"`
+	Jam_kerja    []JamKerja         `bson:"jam_kerja,omitempty" json:"jam_kerja"`
+	Hari_kerja   []string           `bson:"hari_kerja,omitempty" json:"hari_kerja"`
 }
 
 type JamKerja struct { //info tambahan dari karyawan
@@ -33,7 +33,7 @@ type Presensi struct {
 	Phone_number string             `bson:"phone_number" json:"phone_number"`
 	Checkin      string             `bson:"checkin" json:"checkin"`
 	Datetime     time.Time          `bson:"datetime" json:"datetime"`
-	Biodata      Karyawan           `bson:"karyawan" json:"karyawan"`
+	Karyawan     Karyawan           `bson:"karyawan" json:"karyawan"`
 	Keterangan   string             `bson:"ket" json:"ket"`
 	Lampiran     string             `bson:"lampiran" json:"lampiran"`
 }
@@ -49,7 +49,7 @@ type Pulang struct { // input presensi, dimana pulang adalaha kewajiban 8 jam
 	Durasi       string             `bson:"durasi,omitempty"`
 	Persentase   string             `bson:"persentase,omitempty"`
 	Keterangan   string             `bson:"ket,omitempty"`
-	Biodata      Karyawan           `bson:"karyawan,omitempty"`
+	Karyawan     Karyawan           `bson:"karyawan,omitempty"`
 }
 
 type RekapPresensi struct {
