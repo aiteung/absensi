@@ -72,7 +72,7 @@ func hadirHandler(Pesan model.IteungMessage, lokasi string, mongoconn *mongo.Dat
 	// CODE AWAL
 	presensihariini := getPresensiTodayFromPhoneNumber(mongoconn, Pesan.Phone_number)
 	presensipulanghariini := getPresensiPulangTodayFromPhoneNumber(mongoconn, Pesan.Phone_number)
-	durasikerja, persentasekerja := DurasiKerja(time.Now().UTC().Sub(presensihariini.ID.Timestamp()), presensihariini.ID.Timestamp(), time.Now().UTC())
+	durasikerja, persentasekerja := DurasiKerja(time.Now().UTC().Sub(presensihariini.Id.Timestamp()), presensihariini.Id.Timestamp(), time.Now().UTC())
 	// durasikerja := DurasiKerja(time.Now().UTC().Sub(presensihariini.ID.Timestamp()), presensihariini.ID.Timestamp(), time.Now().UTC())
 	karyawan := getKaryawanFromPhoneNumber(mongoconn, Pesan.Phone_number)
 	waktu := GetTimeSekarang(karyawan)
@@ -85,7 +85,7 @@ func hadirHandler(Pesan model.IteungMessage, lokasi string, mongoconn *mongo.Dat
 	fmt.Println(karyawan.Jam_kerja[0].Durasi)
 	if !reflect.ValueOf(presensihariini).IsZero() {
 		fmt.Println(presensihariini)
-		aktifjamkerja := time.Now().UTC().Sub(presensihariini.ID.Timestamp().UTC())
+		aktifjamkerja := time.Now().UTC().Sub(presensihariini.Id.Timestamp().UTC())
 		fmt.Println(aktifjamkerja)
 		if waktu < pulang && reflect.ValueOf(presensipulanghariini).IsZero() {
 			keterangan := "Lebih Cepat"

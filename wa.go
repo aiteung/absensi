@@ -59,7 +59,7 @@ func MessagePresensiSudahPulang(karyawan Karyawan) string {
 func MessageJamKerja(karyawan Karyawan, aktifjamkerja time.Duration, presensihariini Presensi) string {
 	msg := "*Keterangan Presensi Kerja*\n"
 	msg = msg + fmt.Sprintf("yah kak, mohon maaf jam kerja nya belum %v jam. Sabar dulu ya..... nanti presensi kembali.\n", karyawan.Jam_kerja[0].Durasi)
-	msg = msg + fmt.Sprintf("ID presensi masuk : %v", presensihariini.ID) + "\n" + "Durasi Kerja : " + strings.Replace(aktifjamkerja.String(), "h", " jam ", 1)
+	msg = msg + fmt.Sprintf("ID presensi masuk : %v", presensihariini.Id) + "\n" + "Durasi Kerja : " + strings.Replace(aktifjamkerja.String(), "h", " jam ", 1)
 	return msg
 }
 
@@ -91,7 +91,7 @@ func ButtonMessageJamKerja(karyawan Karyawan, aktifjamkerja time.Duration, prese
 	var btnmsg atmessage.ButtonsMessage
 	btnmsg.Message.HeaderText = "Keterangan Presensi Kerja"
 	btnmsg.Message.ContentText = fmt.Sprintf("yah kak, mohon maaf jam kerja nya belum %v jam. Sabar dulu ya..... nanti presensi kembali.", karyawan.Jam_kerja[0].Durasi)
-	btnmsg.Message.FooterText = fmt.Sprintf("ID presensi masuk : %v", presensihariini.ID) + "\n" + "Durasi Kerja : " + strings.Replace(aktifjamkerja.String(), "h", " jam ", 1)
+	btnmsg.Message.FooterText = fmt.Sprintf("ID presensi masuk : %v", presensihariini.Id) + "\n" + "Durasi Kerja : " + strings.Replace(aktifjamkerja.String(), "h", " jam ", 1)
 	btnmsg.Buttons = []atmessage.WaButton{{
 		ButtonId:    "adorable|ijin|wekwek",
 		DisplayText: "Ijin Keluar",
@@ -216,7 +216,7 @@ func ListMessageJamKerja(karyawan Karyawan, aktifjamkerja time.Duration, presens
 	var lmsg atmessage.ListMessage
 	lmsg.Title = "Keterangan Presensi Kerja"
 	lmsg.Description = fmt.Sprintf("yah kak, mohon maaf jam kerja nya belum %v jam. Sabar dulu ya..... nanti presensi kembali.", karyawan.Jam_kerja[0].Durasi)
-	lmsg.FooterText = fmt.Sprintf("ID presensi masuk : %v", presensihariini.ID) + "\n" + "Durasi Kerja : " + strings.Replace(aktifjamkerja.String(), "h", " jam ", 1)
+	lmsg.FooterText = fmt.Sprintf("ID presensi masuk : %v", presensihariini.Id) + "\n" + "Durasi Kerja : " + strings.Replace(aktifjamkerja.String(), "h", " jam ", 1)
 
 	lmsg.ButtonText = "Keterangan"
 	var listrow []atmessage.WaListRow

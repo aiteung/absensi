@@ -26,20 +26,20 @@ type JamKerja struct { //info tambahan dari karyawan
 }
 
 type Presensi struct {
-	ID           primitive.ObjectID `bson:"_id,omitempty" json:"_id"`
+	Id           primitive.ObjectID `bson:"_id,omitempty" json:"_id"`
 	Longitude    float64            `bson:"longitude" json:"longitude"`
 	Latitude     float64            `bson:"latitude" json:"latitude"`
 	Location     string             `bson:"location" json:"location"`
 	Phone_number string             `bson:"phone_number" json:"phone_number"`
 	Checkin      string             `bson:"checkin" json:"checkin"`
-	Datetime     time.Time          `bson:"datetime" json:"datetime"`
+	Datetime     time.Time          `bson:"datetime,omitempty"`
 	Karyawan     Karyawan           `bson:"karyawan" json:"karyawan"`
 	Keterangan   string             `bson:"ket" json:"ket"`
 	Lampiran     string             `bson:"lampiran" json:"lampiran"`
 }
 
 type Pulang struct { // input presensi, dimana pulang adalaha kewajiban 8 jam
-	ID           primitive.ObjectID `bson:"_id,omitempty"`
+	Id           primitive.ObjectID `bson:"_id,omitempty"`
 	Longitude    float64            `bson:"longitude,omitempty"`
 	Latitude     float64            `bson:"latitude,omitempty"`
 	Location     string             `bson:"location,omitempty"`

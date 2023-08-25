@@ -236,7 +236,7 @@ func ExportToExcel(data []Presensi, filename string) error {
 		rowNum := i + 2
 
 		// waktuPresensi := presensi.ID.Timestamp().(loc)
-		waktuPresensi := ConvertTimestampToJkt(GetTimestampFromObjectID(presensi.ID))
+		waktuPresensi := ConvertTimestampToJkt(GetTimestampFromObjectID(presensi.Id))
 
 		f.SetCellValue("Sheet1", fmt.Sprintf("A%d", rowNum), waktuPresensi.Format("2006-01-02"))
 		f.SetCellValue("Sheet1", fmt.Sprintf("B%d", rowNum), presensi.Karyawan.Nama)
