@@ -3,6 +3,8 @@ package absensi
 import (
 	"fmt"
 	"time"
+
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 func GetFirstLastDateCurrentMonth() (firstOfMonth, lastOfMonth time.Time) {
@@ -17,4 +19,14 @@ func GetFirstLastDateCurrentMonth() (firstOfMonth, lastOfMonth time.Time) {
 	fmt.Println(lastOfMonth)
 	return
 
+}
+
+func GetTimestampFromObjectID(objectID primitive.ObjectID) time.Time {
+	timestamp := objectID.Timestamp()
+	return timestamp
+}
+
+func ConvertTimestampToJkt(waktu time.Time) time.Time {
+	loc, _ := time.LoadLocation("Asia/Jakarta")
+	return waktu.In(loc)
 }

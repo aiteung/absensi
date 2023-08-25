@@ -9,7 +9,6 @@ import (
 	"github.com/aiteung/atmessage"
 	"github.com/aiteung/module/model"
 	"github.com/aiteung/musik"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 
 	"go.mau.fi/whatsmeow"
@@ -301,8 +300,8 @@ func fillStructPresensi(Pesan model.IteungMessage, Checkin string, Keterangan st
 	presensi.Longitude = Pesan.Longitude
 	presensi.Location = GetLokasi(mongoconn, Pesan.Longitude, Pesan.Latitude)
 	presensi.Phone_number = Pesan.Phone_number
-	presensi.Datetime = primitive.NewDateTimeFromTime(time.Now().UTC())
 	presensi.Checkin = Checkin
+	presensi.Datetime = ConvertTimestampToJkt(time.Now())
 	presensi.Keterangan = Keterangan
 	presensi.Biodata = GetBiodataFromPhoneNumber(mongoconn, Pesan.Phone_number)
 	return presensi
@@ -313,8 +312,8 @@ func fillStructPresensiPulang(Pesan model.IteungMessage, Checkin string, Keteran
 	pulang.Longitude = Pesan.Longitude
 	pulang.Location = GetLokasi(mongoconn, Pesan.Longitude, Pesan.Latitude)
 	pulang.Phone_number = Pesan.Phone_number
-	pulang.Datetime = primitive.NewDateTimeFromTime(time.Now().UTC())
 	pulang.Checkin = Checkin
+	pulang.Datetime = ConvertTimestampToJkt(time.Now())
 	pulang.Keterangan = Keterangan
 	pulang.Durasi = Durasi
 	pulang.Persentase = Persentase

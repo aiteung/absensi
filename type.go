@@ -1,6 +1,8 @@
 package absensi
 
 import (
+	"time"
+
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
@@ -23,16 +25,17 @@ type JamKerja struct { //info tambahan dari karyawan
 	Piket_tim  string   `bson:"piket_tim,omitempty"`
 }
 
-type Presensi struct { // input presensi, dimana pulang adalaha kewajiban 8 jam
-	ID           primitive.ObjectID `bson:"_id,omitempty"`
-	Longitude    float64            `bson:"longitude,omitempty"`
-	Latitude     float64            `bson:"latitude,omitempty"`
-	Location     string             `bson:"location,omitempty"`
-	Phone_number string             `bson:"phone_number,omitempty"`
-	Datetime     primitive.DateTime `bson:"datetime,omitempty"`
-	Checkin      string             `bson:"checkin,omitempty"`
-	Keterangan   string             `bson:"ket,omitempty"`
-	Biodata      Karyawan           `bson:"biodata,omitempty"`
+type Presensi struct {
+	ID           primitive.ObjectID `bson:"_id,omitempty" json:"_id"`
+	Longitude    float64            `bson:"longitude" json:"longitude"`
+	Latitude     float64            `bson:"latitude" json:"latitude"`
+	Location     string             `bson:"location" json:"location"`
+	Phone_number string             `bson:"phone_number" json:"phone_number"`
+	Checkin      string             `bson:"checkin" json:"checkin"`
+	Datetime     time.Time          `bson:"datetime" json:"datetime"`
+	Biodata      Karyawan           `bson:"karyawan" json:"karyawan"`
+	Keterangan   string             `bson:"ket" json:"ket"`
+	Lampiran     string             `bson:"lampiran" json:"lampiran"`
 }
 
 type Pulang struct { // input presensi, dimana pulang adalaha kewajiban 8 jam
@@ -41,12 +44,12 @@ type Pulang struct { // input presensi, dimana pulang adalaha kewajiban 8 jam
 	Latitude     float64            `bson:"latitude,omitempty"`
 	Location     string             `bson:"location,omitempty"`
 	Phone_number string             `bson:"phone_number,omitempty"`
-	Datetime     primitive.DateTime `bson:"datetime,omitempty"`
 	Checkin      string             `bson:"checkin,omitempty"`
+	Datetime     time.Time          `bson:"datetime" json:"datetime"`
 	Durasi       string             `bson:"durasi,omitempty"`
 	Persentase   string             `bson:"persentase,omitempty"`
 	Keterangan   string             `bson:"ket,omitempty"`
-	Biodata      Karyawan           `bson:"biodata,omitempty"`
+	Biodata      Karyawan           `bson:"karyawan,omitempty"`
 }
 
 type RekapPresensi struct {
@@ -69,4 +72,19 @@ type Lokasi struct { //lokasi yang bisa melakukan presensi
 type Geometry struct { //data geometry untuk lokasi presensi
 	Type        string      `json:"type" bson:"type"`
 	Coordinates interface{} `json:"coordinates" bson:"coordinates"`
+}
+
+type TidakMasuk struct {
+	Id         primitive.ObjectID `bson:"_id,omitempty" json:"_id"`
+	Nama       string             `bson:"nama" json:"nama"`
+	Jabatan    string             `bson:"jabatan" json:"jabatan"`
+	Keterangan string             `bson:"ket" json:"ket"`
+	Lampiran   string             `bson:"lampiran" json:"lampiran"`
+}
+
+type User struct {
+	Id          primitive.ObjectID `bson:"_id,omitempty" json:"_id,omitempty"`
+	Nama        string             `bson:"nama" json:"nama"`
+	PhoneNumber string             `bson:"phone_number" json:"phone_number"`
+	Role        string             `bson:"role" json:"role"`
 }

@@ -1,14 +1,16 @@
 package absensi
 
 import (
-	"fmt"
+	// "fmt"
+	// "log"
+
 	"os"
 	"testing"
 
-	"time"
-
 	"github.com/aiteung/atdb"
 	_ "github.com/mattn/go-sqlite3"
+
+	// "go.mongodb.org/mongo-driver/bson/primitive"
 
 	// "go.mau.fi/whatsmeow"
 	waProto "go.mau.fi/whatsmeow/binary/proto"
@@ -58,15 +60,42 @@ var Msg = waProto.Message{
 // 	fmt.Println(cekhadir)
 // }
 
-func TestDurasi(t *testing.T) {
-	start := time.Date(2023, time.August, 22, 9, 0, 0, 0, time.UTC)
-	end := time.Date(2023, time.August, 22, 17, 30, 0, 0, time.UTC)
-	durasi := end.Sub(start)
+// func TestDurasi(t *testing.T) {
+// 	start := time.Date(2023, time.August, 22, 9, 0, 0, 0, time.UTC)
+// 	end := time.Date(2023, time.August, 22, 17, 30, 0, 0, time.UTC)
+// 	durasi := end.Sub(start)
 
-	durasiFormatted, percentageFormatted := DurasiKerja(durasi, start, end)
+// 	durasiFormatted, percentageFormatted := DurasiKerja(durasi, start, end)
 
-	fmt.Println("Durasi Kerja:", durasiFormatted)
-	fmt.Println("Persentase Kerja:", percentageFormatted)
+// 	fmt.Println("Durasi Kerja:", durasiFormatted)
+// 	fmt.Println("Persentase Kerja:", percentageFormatted)
+// }
+
+// func TestTimeStamp(t *testing.T) {
+// 	objectIDStr := "64e7f243ca06a39f7e741b9d" // Contoh ObjectID MongoDB
+// 	timestamp, err := GetTimestampFromObjectID(objectIDStr)
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
+
+// 	fmt.Println("Timestamp:", timestamp)
+// }
+
+// func TestTimeStamp(t *testing.T) {
+// 	objectIDStr := "64e7f243ca06a39f7e741b9d" // Contoh ObjectID MongoDB
+// 	objID, err := primitive.ObjectIDFromHex(objectIDStr)
+// 	timestamp := GetTimestampFromObjectID(objID)
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
+// 	fmt.Println("Timestamp:", timestamp)
+
+// 	timestamp = ConvertTimestampToJkt(timestamp)
+// 	fmt.Println("Waktu Indonesia Bagian Barat:", timestamp)
+// }
+
+func TestTimeStamp(t *testing.T) {
+	CopyCollectionKaryawanToPresensiBelum(MongoConn)
 }
 
 // func TestPersentase(t *testing.T) {
