@@ -87,7 +87,11 @@ func hadirHandler(Pesan model.IteungMessage, lokasi string, mongoconn *mongo.Dat
 		fmt.Println(presensihariini)
 		aktifjamkerja := time.Now().UTC().Sub(presensihariini.Id.Timestamp().UTC())
 		fmt.Println(aktifjamkerja)
-		if waktu < pulang && reflect.ValueOf(presensipulanghariini).IsZero() {
+		if int(aktifjamkerja.Hours()) >= karyawan.Jam_kerja[0].Durasi && reflect.ValueOf(presensipulanghariini).IsZero() {
+			keterangan := "Tuntas Bekerja"
+			id := InsertPresensiPulang(Pesan, "pulang", keterangan, durasikerja, persentasekerja, mongoconn)
+			msg = MessagePulangKerja8Jam(karyawan, durasikerja, persentasekerja, keterangan, id, lokasi)
+		} else if waktu < pulang && reflect.ValueOf(presensipulanghariini).IsZero() {
 			keterangan := "Lebih Cepat"
 			id := InsertPresensiPulang(Pesan, "pulang", keterangan, durasikerja, persentasekerja, mongoconn)
 			msg = MessagePulangKerjaCepat(karyawan, durasikerja, persentasekerja, keterangan, id, lokasi, selisihpulangcepat)
