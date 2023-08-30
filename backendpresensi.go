@@ -206,15 +206,14 @@ func InsertOneDoc(db *mongo.Database, collection string, doc interface{}) (inser
 	return insertResult.InsertedID
 }
 
-func InsertDokumenTidakMasuk(db *mongo.Database, Id primitive.ObjectID, keterangan string, lampiran string, TanggalMulaiTdkMasuk string, TanggalSelesaiTdkMasuk string) (InsertedID interface{}, err error) {
+func InsertDokumenTidakMasuk(db *mongo.Database, Id primitive.ObjectID, keterangan string, lampiran string, Tanggal string) (InsertedID interface{}, err error) {
 	var presensi Presensi
 	presensi.Latitude, presensi.Longitude = 0, 0
 	presensi.Location = "Tidak Ada"
 	presensi.Karyawan = GetBiodataFromId(db, Id)
 	presensi.Keterangan = keterangan
 	presensi.Lampiran = lampiran
-	presensi.TanggalMulaiTdkMasuk = TanggalMulaiTdkMasuk
-	presensi.TanggalSelesaiTdkMasuk = TanggalSelesaiTdkMasuk
+	presensi.Tanggal = Tanggal
 	return InsertOneDoc(db, "presensi", presensi), err
 }
 
