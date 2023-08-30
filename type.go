@@ -26,16 +26,18 @@ type JamKerja struct { //info tambahan dari karyawan
 }
 
 type Presensi struct {
-	Id           primitive.ObjectID `bson:"_id,omitempty" json:"_id"`
-	Longitude    float64            `bson:"longitude" json:"longitude"`
-	Latitude     float64            `bson:"latitude" json:"latitude"`
-	Location     string             `bson:"location" json:"location"`
-	Phone_number string             `bson:"phone_number" json:"phone_number"`
-	Checkin      string             `bson:"checkin" json:"checkin"`
-	Datetime     time.Time          `bson:"datetime,omitempty"`
-	Karyawan     Karyawan           `bson:"biodata" json:"biodata"`
-	Keterangan   string             `bson:"ket" json:"ket"`
-	Lampiran     string             `bson:"lampiran" json:"lampiran"`
+	Id                     primitive.ObjectID `bson:"_id,omitempty" json:"_id"`
+	Longitude              float64            `bson:"longitude" json:"longitude"`
+	Latitude               float64            `bson:"latitude" json:"latitude"`
+	Location               string             `bson:"location" json:"location"`
+	Phone_number           string             `bson:"phone_number" json:"phone_number"`
+	Checkin                string             `bson:"checkin" json:"checkin"`
+	Datetime               time.Time          `bson:"datetime,omitempty"`
+	Karyawan               Karyawan           `bson:"biodata" json:"biodata"`
+	Keterangan             string             `bson:"ket" json:"ket"`
+	Lampiran               string             `bson:"lampiran" json:"lampiran"`
+	TanggalMulaiTdkMasuk   string             `bson:"tgl_mulai_tdk_masuk" json:"tgl_mulai_tdk_masuk"`
+	TanggalSelesaiTdkMasuk string             `bson:"tgl_selesai_tdk_masuk" json:"tgl_selesai_tdk_masuk"`
 }
 
 type Pulang struct { // input presensi, dimana pulang adalaha kewajiban 8 jam

@@ -4,11 +4,14 @@ import (
 	// "fmt"
 	// "log"
 
+	"fmt"
+	"log"
 	"os"
 	"testing"
 
 	"github.com/aiteung/atdb"
 	_ "github.com/mattn/go-sqlite3"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 
 	// "go.mongodb.org/mongo-driver/bson/primitive"
 
@@ -81,22 +84,22 @@ var Msg = waProto.Message{
 // 	fmt.Println("Timestamp:", timestamp)
 // }
 
-// func TestTimeStamp(t *testing.T) {
-// 	objectIDStr := "64e7f243ca06a39f7e741b9d" // Contoh ObjectID MongoDB
-// 	objID, err := primitive.ObjectIDFromHex(objectIDStr)
-// 	timestamp := GetTimestampFromObjectID(objID)
-// 	if err != nil {
-// 		log.Fatal(err)
-// 	}
-// 	fmt.Println("Timestamp:", timestamp)
-
-// 	timestamp = ConvertTimestampToJkt(timestamp)
-// 	fmt.Println("Waktu Indonesia Bagian Barat:", timestamp)
-// }
-
 func TestTimeStamp(t *testing.T) {
-	CopyCollectionKaryawanToPresensiBelum(MongoConn)
+	objectIDStr := "64e7f243ca06a39f7e741b9d" // Contoh ObjectID MongoDB
+	objID, err := primitive.ObjectIDFromHex(objectIDStr)
+	timestamp := GetTimestampFromObjectID(objID)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("Timestamp:", timestamp)
+
+	timestamp = ConvertTimestampToJkt(timestamp)
+	fmt.Println("Waktu Indonesia Bagian Barat:", timestamp)
 }
+
+// func TestTimeStamp(t *testing.T) {
+// 	CopyCollectionKaryawanToPresensiBelum(MongoConn)
+// }
 
 // func TestPersentase(t *testing.T) {
 // 	start := time.Date(2023, time.August, 22, 9, 0, 0, 0, time.UTC)
