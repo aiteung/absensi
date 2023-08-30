@@ -140,8 +140,8 @@ func InsertPresensi(Pesan model.IteungMessage, Checkin string, Keterangan string
 	return insertResult.InsertedID
 }
 
-func InsertPresensiPulang(Pesan model.IteungMessage, Checkin string, Keterangan string, Status string, Durasi string, Persentase string, mongoconn *mongo.Database) (InsertedID interface{}) {
-	insertResult, err := mongoconn.Collection("presensi_pulang").InsertOne(context.TODO(), fillStructPresensiPulang(Pesan, Checkin, Keterangan, Status, Durasi, Persentase, mongoconn))
+func InsertPresensiPulang(Pesan model.IteungMessage, Checkin string, Keterangan string, Durasi string, Persentase string, mongoconn *mongo.Database) (InsertedID interface{}) {
+	insertResult, err := mongoconn.Collection("presensi_pulang").InsertOne(context.TODO(), fillStructPresensiPulang(Pesan, Checkin, Keterangan, Durasi, Persentase, mongoconn))
 	if err != nil {
 		fmt.Printf("InsertOneDoc: %v\n", err)
 	}

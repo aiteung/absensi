@@ -83,13 +83,9 @@ var Msg = waProto.Message{
 // }
 
 func TestTimeStamp(t *testing.T) {
-	currentTime, err := GetTimeNow()
-	if err != nil {
-		fmt.Println("Error:", err)
-		return
-	}
-
-	fmt.Println("Current time in Asia/Jakarta:", currentTime)
+	karyawan := getKaryawanFromPhoneNumber(MongoConn, Pesan.Sender.User)
+	waktu := GetTimeSekarang(karyawan)
+	fmt.Println(waktu)
 }
 
 // func TestTimeStamp(t *testing.T) {
