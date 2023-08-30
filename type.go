@@ -50,6 +50,7 @@ type Pulang struct { // input presensi, dimana pulang adalaha kewajiban 8 jam
 	Durasi       string             `bson:"durasi" json:"durasi"`
 	Persentase   string             `bson:"persentase" json:"persentase"`
 	Keterangan   string             `bson:"ket" json:"ket"`
+	Status       string             `bson:"status" json:"status"`
 	Karyawan     Karyawan           `bson:"biodata" json:"biodata"`
 }
 

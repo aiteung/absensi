@@ -5,13 +5,11 @@ import (
 	// "log"
 
 	"fmt"
-	"log"
 	"os"
 	"testing"
 
 	"github.com/aiteung/atdb"
 	_ "github.com/mattn/go-sqlite3"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 
 	// "go.mongodb.org/mongo-driver/bson/primitive"
 
@@ -85,16 +83,13 @@ var Msg = waProto.Message{
 // }
 
 func TestTimeStamp(t *testing.T) {
-	objectIDStr := "64e7f243ca06a39f7e741b9d" // Contoh ObjectID MongoDB
-	objID, err := primitive.ObjectIDFromHex(objectIDStr)
-	timestamp := GetTimestampFromObjectID(objID)
+	currentTime, err := GetTimeNow()
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println("Error:", err)
+		return
 	}
-	fmt.Println("Timestamp:", timestamp)
 
-	timestamp = ConvertTimestampToJkt(timestamp)
-	fmt.Println("Waktu Indonesia Bagian Barat:", timestamp)
+	fmt.Println("Current time in Asia/Jakarta:", currentTime)
 }
 
 // func TestTimeStamp(t *testing.T) {

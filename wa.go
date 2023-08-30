@@ -87,6 +87,14 @@ func MessagePulangKerjaCepat(karyawan Karyawan, durasikerja string, persentase s
 	return msg
 }
 
+func MessagePulangKerjaBelumTuntas(karyawan Karyawan, durasikerja string, persentase string, keterangan string, id interface{}, lokasi string, selisihpulang string) string {
+	msg := "*Pulang Kerja*\n"
+	msg = msg + "Hai kak _" + karyawan.Nama + "_,\ndari bagian *" + karyawan.Jabatan + "*, \nkakak *BELUM TUNTAS* bekerja dan sudah melakukan presensi pulang " + selisihpulang + "\nLokasi : _*" + lokasi + "*_\n"
+	msg = msg + fmt.Sprintf("\nID presensi pulang : %v", id) + "\n" + "Durasi Kerja : " + durasikerja + "\n" + "Persentase Kerja : " + persentase + "\n"
+	msg = msg + fmt.Sprintf("Keterangan Pulang : *%s*\n", keterangan)
+	return msg
+}
+
 func MessagePulangLebihLama(karyawan Karyawan, durasikerja string, persentase string, keterangan string, id interface{}, lokasi string, selisihpulang string) string {
 	msg := "*Pulang Kerja*\n"
 	msg = msg + "Hai kak _" + karyawan.Nama + "_,\ndari bagian *" + karyawan.Jabatan + "*, \nkakak pulang lebih lama " + selisihpulang + "\nLokasi : _*" + lokasi + "*_\n"
