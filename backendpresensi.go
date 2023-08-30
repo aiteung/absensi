@@ -149,6 +149,23 @@ func UpdatePresensi(db *mongo.Database, Id primitive.ObjectID, update bson.M) er
 	return nil
 }
 
+func UpdateKaryawan(db *mongo.Database, Id primitive.ObjectID, update bson.M) error {
+	karyawan := db.Collection("karyawan")
+
+	filter := bson.M{"_id": Id}
+
+	updateResult, err := karyawan.UpdateOne(context.TODO(), filter, update)
+	if err != nil {
+		return err
+	}
+
+	if updateResult.ModifiedCount == 0 {
+		return errors.New("Data Tidak Ditemukan")
+	}
+
+	return nil
+}
+
 func GetDataKaryawan(db *mongo.Database) (data []Karyawan, err error) {
 	karyawan := db.Collection("karyawan")
 	filter := bson.M{} // Empty filter to get all data
