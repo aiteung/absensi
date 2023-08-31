@@ -195,6 +195,22 @@ func GetOneKaryawan(Id primitive.ObjectID, db *mongo.Database) (data Karyawan, e
 	return data, err
 }
 
+func InsertKaryawan(db *mongo.Database, data bson.M) error {
+	karyawan := db.Collection("karyawan")
+
+	insertResult, err := karyawan.InsertOne(context.TODO(), data)
+	if err != nil {
+		return err
+	}
+
+	// Mengakses _id yang dihasilkan dari operasi penyisipan
+	if oid, ok := insertResult.InsertedID.(primitive.ObjectID); ok {
+		fmt.Printf("Data berhasil ditambah dengan _id: %s\n", oid.Hex())
+	}
+
+	return nil
+}
+
 func GetBiodataFromId(mongoconn *mongo.Database, Id primitive.ObjectID) (staf Karyawan) {
 	karyawan := mongoconn.Collection("karyawan")
 	filter := bson.M{"_id": Id}
@@ -221,6 +237,40 @@ func InsertOneDoc(db *mongo.Database, collection string, doc interface{}) (inser
 		fmt.Printf("InsertOneDoc: %v\n", err)
 	}
 	return insertResult.InsertedID
+}
+
+func DeletePresensi(db *mongo.Database, Id primitive.ObjectID) error {
+	presensi := db.Collection("presensi")
+
+	filter := bson.M{"_id": Id}
+
+	deleteResult, err := presensi.DeleteOne(context.TODO(), filter)
+	if err != nil {
+		return err
+	}
+
+	if deleteResult.DeletedCount == 0 {
+		return errors.New("Data Tidak Ditemukan")
+	}
+
+	return nil
+}
+
+func DeleteKaryawan(db *mongo.Database, Id primitive.ObjectID) error {
+	karyawan := db.Collection("karyawan")
+
+	filter := bson.M{"_id": Id}
+
+	deleteResult, err := karyawan.DeleteOne(context.TODO(), filter)
+	if err != nil {
+		return err
+	}
+
+	if deleteResult.DeletedCount == 0 {
+		return errors.New("Data Tidak Ditemukan")
+	}
+
+	return nil
 }
 
 func InsertDokumenTidakMasuk(db *mongo.Database, Id primitive.ObjectID, keterangan string, lampiran string, Tanggal string) (InsertedID interface{}, err error) {
