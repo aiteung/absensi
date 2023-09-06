@@ -8,7 +8,6 @@ import (
 
 	"github.com/aiteung/atmessage"
 	"github.com/aiteung/module/model"
-	"github.com/aiteung/musik"
 	"go.mongodb.org/mongo-driver/mongo"
 
 	"go.mau.fi/whatsmeow"
@@ -26,21 +25,6 @@ func Handler(Pesan model.IteungMessage, mongoconn *mongo.Database) (reply string
 		reply = tidakhadirHandler(Pesan, mongoconn)
 	}
 	return
-}
-
-func MultiKey(mongoconn *mongo.Database, Info *types.MessageInfo, Message *waProto.Message, whatsapp *whatsmeow.Client) {
-	m := musik.NormalizeString(Message.GetConversation())
-	complete, match := musik.IsMatch(m, "ini", "rekap", "presen", "absen", "hrd", "sdm", "excel", "data", "bulan")
-	fmt.Println(complete)
-	if match >= 2 {
-		resp, err := GenerateReportCurrentMonth(mongoconn, Info.Chat, whatsapp)
-		if err != nil {
-			atmessage.SendMessage("error GenerateReportCurrentMonth", Info.Chat, whatsapp)
-		}
-		fmt.Println(resp)
-
-	}
-
 }
 
 func ButtonMessage(Info *types.MessageInfo, Message *waProto.Message, whatsapp *whatsmeow.Client) {

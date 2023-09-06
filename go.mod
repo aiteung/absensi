@@ -8,7 +8,6 @@ require (
 	github.com/aiteung/atdb v0.0.13
 	github.com/aiteung/atmessage v0.0.27
 	github.com/aiteung/module v0.0.21
-	github.com/aiteung/musik v0.0.5
 	github.com/mattn/go-sqlite3 v1.14.17
 	github.com/xuri/excelize/v2 v2.7.1
 	go.mau.fi/whatsmeow v0.0.0-20230817083005-1c185f033d88
@@ -17,6 +16,7 @@ require (
 
 require (
 	filippo.io/edwards25519 v1.0.0 // indirect
+	github.com/aiteung/musik v0.0.5 // indirect
 	github.com/go-sql-driver/mysql v1.7.1 // indirect
 	github.com/golang-sql/civil v0.0.0-20220223132316-b832511892a9 // indirect
 	github.com/golang-sql/sqlexp v0.1.0 // indirect
