@@ -69,6 +69,12 @@ func MessageSalahShareLoc(karyawan Karyawan) string {
 	return msg
 }
 
+func MessagePresensiDitutup(karyawan Karyawan) string {
+	msg := "*Keterangan Presensi Kerja*\n"
+	msg = msg + "Hai kak _*" + karyawan.Nama + "*_,\ndari bagian *" + karyawan.Jabatan + "*, \nKakak sudah tidak melakukan presensi lagi nihh...\nKarena presensi sudah tidak dapat dilakukan setelah pukul 10.00 pagi.\nMakasih kakakk..."
+	return msg
+}
+
 func MessagePulangKerja(karyawan Karyawan, durasikerja string, persentase string, keterangan string, id interface{}, lokasi string) string {
 	msg := "*Pulang Kerja*\n"
 	msg = msg + "Hai kak _*" + karyawan.Nama + "*_,\ndari bagian *" + karyawan.Jabatan + "*, \nmakasih ya sudah melakukan presensi pulang kerja\nKakak pulang tepat waktu pada pukul 16.30\nLokasi : _*" + lokasi + "*_\n"
