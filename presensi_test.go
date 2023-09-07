@@ -84,8 +84,9 @@ var Msg = waProto.Message{
 
 func TestTimeStamp(t *testing.T) {
 	// karyawan := getKaryawanFromPhoneNumber(MongoConn, Pesan.Sender.User)
-	// waktu := GetTimeSekarang(karyawan)
-	waktu := GetPresensiTodayFromPhoneNumber(MongoConn, "6289522910966")
+	//waktu := GetDateSekarang()
+	//fmt.Println(waktu)
+	waktu := GetPresensiTodayFromPhoneNumber(MongoConn, "6281312000300")
 	fmt.Println(waktu)
 }
 

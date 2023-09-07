@@ -45,7 +45,7 @@ func GetKaryawanFromPhoneNumber(mongoconn *mongo.Database, phone_number string) 
 func GetPresensiTodayFromPhoneNumber(mongoconn *mongo.Database, phone_number string) (presensi Presensi) {
 	coll := mongoconn.Collection("presensi")
 	today := bson.M{
-		"$gte": primitive.NewDateTimeFromTime(ConvertTimestampToJkt(time.Now().Truncate(24 * time.Hour))),
+		"$gte": GetDateSekarang(),
 	}
 	filter := bson.M{"phone_number": phone_number, "datetime": today}
 	err := coll.FindOne(context.TODO(), filter).Decode(&presensi)
