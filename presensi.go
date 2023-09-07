@@ -305,8 +305,15 @@ func fillStructPresensiPulang(Pesan model.IteungMessage, Checkin string, Keteran
 	return pulang
 }
 
-func Member(Info *types.MessageInfo, Message *waProto.Message, mongoconn *mongo.Database) (status bool) {
+func Member(Info *types.MessageInfo, Message *waProto.Message, mongoconn *mongo.Database, Pesan model.IteungMessage) (status bool, responseMessage string) {
 	if GetNamaFromPhoneNumber(mongoconn, Info.Sender.User) != "" && Info.Chat.Server != "g.us" && (Message.LiveLocationMessage != nil || Message.ButtonsResponseMessage != nil) {
+		// Jika pesan tidak berisi LiveLocationMessage
+		if Message.LiveLocationMessage == nil {
+			karyawan := getKaryawanFromPhoneNumber(mongoconn, Pesan.Phone_number)
+			responseMessage = MessageSalahShareLoc(karyawan)
+			status = false
+			return status, responseMessage
+		}
 		if Message.ButtonsResponseMessage != nil {
 			if strings.Contains(*Message.ButtonsResponseMessage.SelectedButtonId, Keyword) {
 				status = true
