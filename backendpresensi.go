@@ -26,7 +26,7 @@ func GetDataPresensi(db *mongo.Database) (data []Presensi, err error) {
 	}
 
 	if len(data) < 1 {
-		return nil, errors.New("Data Tidak Ada")
+		return nil, errors.New("data tidak ada")
 	}
 	return data, nil
 }
@@ -49,14 +49,14 @@ func GetDataPresensiMasukHarian(db *mongo.Database) (data []Presensi, err error)
 
 	// Query the database
 	cur, err := presensi.Find(context.Background(), filter)
-	defer cur.Close(context.Background())
 
 	if err := cur.All(context.Background(), &data); err != nil {
 		return nil, err
 	}
+	defer cur.Close(context.Background())
 
 	if len(data) < 1 {
-		return nil, errors.New("Data Tidak Ada")
+		return nil, errors.New("data tidak ada")
 	}
 	return data, nil
 }
@@ -75,7 +75,7 @@ func GetDataPresensiPulang(db *mongo.Database) (data []Pulang, err error) {
 	}
 
 	if len(data) < 1 {
-		return nil, errors.New("Data Tidak Ada")
+		return nil, errors.New("data tidak ada")
 	}
 	return data, nil
 }
@@ -107,7 +107,7 @@ func GetDataPresensiPulangHarian(db *mongo.Database) (data []Pulang, err error) 
 	}
 
 	if len(data) < 1 {
-		return nil, errors.New("Data Tidak Ada")
+		return nil, errors.New("data tidak ada")
 	}
 	return data, nil
 }
@@ -143,7 +143,7 @@ func UpdatePresensi(db *mongo.Database, Id primitive.ObjectID, update bson.M) er
 	}
 
 	if updateResult.ModifiedCount == 0 {
-		return errors.New("Data Tidak Ditemukan")
+		return errors.New("data tidak ditemukan")
 	}
 
 	return nil
@@ -160,7 +160,7 @@ func UpdateKaryawan(db *mongo.Database, Id primitive.ObjectID, update bson.M) er
 	}
 
 	if updateResult.ModifiedCount == 0 {
-		return errors.New("Data Tidak Ditemukan")
+		return errors.New("data tidak ditemukan")
 	}
 
 	return nil
@@ -180,7 +180,7 @@ func GetDataKaryawan(db *mongo.Database) (data []Karyawan, err error) {
 	}
 
 	if len(data) < 1 {
-		return nil, errors.New("Data Tidak Ada")
+		return nil, errors.New("data tidak ada")
 	}
 	return data, nil
 }
@@ -250,7 +250,7 @@ func DeletePresensi(db *mongo.Database, Id primitive.ObjectID) error {
 	}
 
 	if deleteResult.DeletedCount == 0 {
-		return errors.New("Data Tidak Ditemukan")
+		return errors.New("data tidak ditemukan")
 	}
 
 	return nil
@@ -267,7 +267,7 @@ func DeleteKaryawan(db *mongo.Database, Id primitive.ObjectID) error {
 	}
 
 	if deleteResult.DeletedCount == 0 {
-		return errors.New("Data Tidak Ditemukan")
+		return errors.New("data tidak ditemukan")
 	}
 
 	return nil

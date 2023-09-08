@@ -114,12 +114,12 @@ func hadirHandler(Pesan model.IteungMessage, lokasi string, mongoconn *mongo.Dat
 }
 
 func DurasiKerja(durasi time.Duration, start time.Time, end time.Time) (string, string) {
-	aktifjamkerja := end.Sub(start)
+	//aktifjamkerja := end.Sub(start)
 
 	loc, _ := time.LoadLocation("Asia/Jakarta")
 	endInJakarta := end.In(loc)
 
-	aktifjamkerja = endInJakarta.Sub(start)
+	aktifjamkerja := endInJakarta.Sub(start)
 
 	totalMinutes := aktifjamkerja.Minutes()
 	percentageOfWork := (totalMinutes / (8*60 + 30)) * 100
