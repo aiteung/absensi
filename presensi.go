@@ -66,27 +66,32 @@ func hadirHandler(Pesan model.IteungMessage, lokasi string, mongoconn *mongo.Dat
 	masuk := GetTimeKerja(karyawan)
 	selisihmasukcepat := SelisihJamMasukCepat(karyawan)
 	selisihmasuk := SelisihJamMasuk(karyawan)
-	batasWaktu := time.Hour * 2
 	tutup := GetBatasPresensi()
 	aktifjamkerja := time.Now().UTC().Sub(presensihariini.Id.Timestamp().UTC())
 	fmt.Println(karyawan.Jam_kerja[0].Durasi)
-	if !reflect.ValueOf(presensihariini).IsZero() && aktifjamkerja > batasWaktu {
+
+	if !reflect.ValueOf(presensihariini).IsZero() {
 		fmt.Println(presensihariini)
 		fmt.Println(aktifjamkerja)
-		if waktu < pulang && reflect.ValueOf(presensipulanghariini).IsZero() {
-			keterangan := "Lebih Cepat"
-			id := InsertPresensiPulang(Pesan, "pulang", keterangan, durasikerja, persentasekerja, mongoconn)
-			msg = MessagePulangKerjaCepat(karyawan, durasikerja, persentasekerja, keterangan, id, lokasi, selisihpulangcepat)
-		} else if waktu > pulang && reflect.ValueOf(presensipulanghariini).IsZero() {
-			keterangan := "Lebih Lama"
-			id := InsertPresensiPulang(Pesan, "pulang", keterangan, durasikerja, persentasekerja, mongoconn)
-			msg = MessagePulangLebihLama(karyawan, durasikerja, persentasekerja, keterangan, id, lokasi, selisihpulang)
-		} else if waktu == pulang && reflect.ValueOf(presensipulanghariini).IsZero() {
-			keterangan := "Tepat Waktu"
-			id := InsertPresensiPulang(Pesan, "pulang", keterangan, durasikerja, persentasekerja, mongoconn)
-			msg = MessagePulangKerja(karyawan, durasikerja, persentasekerja, keterangan, id, lokasi)
-		} else if !reflect.ValueOf(presensipulanghariini).IsZero() {
-			msg = MessagePresensiSudahPulang(karyawan)
+		// Tambahkan kondisi ini untuk memeriksa durasi kerja sebelum mengizinkan presensi pulang
+		if aktifjamkerja >= (2 * time.Hour) {
+			if waktu < pulang && reflect.ValueOf(presensipulanghariini).IsZero() {
+				keterangan := "Lebih Cepat"
+				id := InsertPresensiPulang(Pesan, "pulang", keterangan, durasikerja, persentasekerja, mongoconn)
+				msg = MessagePulangKerjaCepat(karyawan, durasikerja, persentasekerja, keterangan, id, lokasi, selisihpulangcepat)
+			} else if waktu > pulang && reflect.ValueOf(presensipulanghariini).IsZero() {
+				keterangan := "Lebih Lama"
+				id := InsertPresensiPulang(Pesan, "pulang", keterangan, durasikerja, persentasekerja, mongoconn)
+				msg = MessagePulangLebihLama(karyawan, durasikerja, persentasekerja, keterangan, id, lokasi, selisihpulang)
+			} else if waktu == pulang && reflect.ValueOf(presensipulanghariini).IsZero() {
+				keterangan := "Tepat Waktu"
+				id := InsertPresensiPulang(Pesan, "pulang", keterangan, durasikerja, persentasekerja, mongoconn)
+				msg = MessagePulangKerja(karyawan, durasikerja, persentasekerja, keterangan, id, lokasi)
+			} else if !reflect.ValueOf(presensipulanghariini).IsZero() {
+				msg = MessagePresensiSudahPulang(karyawan)
+			} else {
+				msg = MessageJamKerja(karyawan, aktifjamkerja, presensihariini)
+			}
 		} else {
 			msg = MessageBelumBisaPresensiPulang(karyawan)
 		}

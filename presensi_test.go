@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"os"
 	"testing"
+	"time"
 
 	"github.com/aiteung/atdb"
 	_ "github.com/mattn/go-sqlite3"
@@ -91,9 +92,10 @@ var Msg = waProto.Message{
 // }
 
 func TestTimeStamp(t *testing.T) {
-	// karyawan := getKaryawanFromPhoneNumber(MongoConn, "6289522910966")
-	waktu := GetBatasPresensi()
-	fmt.Println(waktu)
+	presensihariini := getPresensiTodayFromPhoneNumber(MongoConn, "")
+	durasikerja, persentasekerja := DurasiKerja(time.Now().UTC().Sub(presensihariini.Id.Timestamp()), presensihariini.Id.Timestamp(), time.Now().UTC())
+	fmt.Println(durasikerja)
+	fmt.Println(persentasekerja)
 }
 
 // func TestTimeStamp(t *testing.T) {
