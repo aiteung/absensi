@@ -88,7 +88,7 @@ func hadirHandler(Pesan model.IteungMessage, lokasi string, mongoconn *mongo.Dat
 		} else if !reflect.ValueOf(presensipulanghariini).IsZero() {
 			msg = MessagePresensiSudahPulang(karyawan)
 		} else {
-			msg = MessageJamKerja(karyawan, aktifjamkerja, presensihariini)
+			msg = MessageBelumBisaPresensiPulang(karyawan)
 		}
 	} else if waktu < masuk && waktu < tutup {
 		keterangan := "Lebih Cepat"
