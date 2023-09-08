@@ -59,17 +59,19 @@ func hadirHandler(Pesan model.IteungMessage, lokasi string, mongoconn *mongo.Dat
 	durasikerja, persentasekerja := DurasiKerja(time.Now().UTC().Sub(presensihariini.Id.Timestamp()), presensihariini.Id.Timestamp(), time.Now().UTC())
 	// durasikerja := DurasiKerja(time.Now().UTC().Sub(presensihariini.ID.Timestamp()), presensihariini.ID.Timestamp(), time.Now().UTC())
 	karyawan := getKaryawanFromPhoneNumber(mongoconn, Pesan.Phone_number)
-	waktu := GetTimeSekarang(karyawan)
+	waktu := GetTimeSekarang()
 	pulang := GetTimePulang(karyawan)
 	selisihpulangcepat := SelisihJamPulangCepat(karyawan)
 	selisihpulang := SelisihJamPulang(karyawan)
 	masuk := GetTimeKerja(karyawan)
 	selisihmasukcepat := SelisihJamMasukCepat(karyawan)
 	selisihmasuk := SelisihJamMasuk(karyawan)
+	batasWaktu := time.Hour * 2
+	tutup := GetBatasPresensi()
+	aktifjamkerja := time.Now().UTC().Sub(presensihariini.Id.Timestamp().UTC())
 	fmt.Println(karyawan.Jam_kerja[0].Durasi)
-	if !reflect.ValueOf(presensihariini).IsZero() {
+	if !reflect.ValueOf(presensihariini).IsZero() && aktifjamkerja > batasWaktu {
 		fmt.Println(presensihariini)
-		aktifjamkerja := time.Now().UTC().Sub(presensihariini.Id.Timestamp().UTC())
 		fmt.Println(aktifjamkerja)
 		if waktu < pulang && reflect.ValueOf(presensipulanghariini).IsZero() {
 			keterangan := "Lebih Cepat"
@@ -88,18 +90,20 @@ func hadirHandler(Pesan model.IteungMessage, lokasi string, mongoconn *mongo.Dat
 		} else {
 			msg = MessageJamKerja(karyawan, aktifjamkerja, presensihariini)
 		}
-	} else if waktu < masuk {
+	} else if waktu < masuk && waktu < tutup {
 		keterangan := "Lebih Cepat"
 		id := InsertPresensi(Pesan, "masuk", keterangan, mongoconn)
 		msg = MessageMasukKerjaCepat(karyawan, id, lokasi, selisihmasukcepat, keterangan)
-	} else if waktu > masuk {
+	} else if waktu > masuk && waktu < tutup {
 		keterangan := "Terlambat"
 		id := InsertPresensi(Pesan, "masuk", keterangan, mongoconn)
 		msg = MessageTerlambatKerja(karyawan, id, lokasi, selisihmasuk, keterangan)
-	} else {
+	} else if waktu == masuk && waktu < tutup {
 		keterangan := "Tepat Waktu"
 		id := InsertPresensi(Pesan, "masuk", keterangan, mongoconn)
 		msg = MessageMasukKerjaTepatWaktu(karyawan, id, lokasi, keterangan)
+	} else {
+		msg = MessagePresensiDitutup(karyawan)
 	}
 	return
 }
@@ -260,7 +264,7 @@ func SelisihJamPulangCepat(karyawan Karyawan) (selisihJamFormatted string) {
 	return selisihJam
 }
 
-func GetTimeSekarang(karyawan Karyawan) (timeSekarangFormatted string) {
+func GetTimeSekarang() (timeSekarangFormatted string) {
 	// Definisi lokasi waktu sekarang
 	location, _ := time.LoadLocation("Asia/Jakarta")
 
@@ -287,6 +291,22 @@ func GetTimeKerja(karyawan Karyawan) (timeKerjaFormatted string) {
 func GetTimePulang(karyawan Karyawan) (timePulangFormatted string) {
 	jam := strings.Replace(karyawan.Jam_kerja[0].Jam_keluar, ".", ":", 1)
 	return jam
+}
+
+func GetBatasPresensi() string {
+	// Buat objek lokasi zona waktu Asia/Jakarta
+	location, _ := time.LoadLocation("Asia/Jakarta")
+
+	// Dapatkan waktu saat ini dalam zona waktu Asia/Jakarta
+	now := time.Now().In(location)
+
+	// Set waktu pukul 10:00 pagi
+	pukulSepuluh := time.Date(now.Year(), now.Month(), now.Day(), 10, 0, 0, 0, location)
+
+	// Format waktu pukul 10:00 sebagai string
+	result := pukulSepuluh.Format("15:04")
+
+	return result
 }
 
 func fillStructPresensi(Pesan model.IteungMessage, Checkin string, Keterangan string, mongoconn *mongo.Database) (presensi Presensi) {

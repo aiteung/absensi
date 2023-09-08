@@ -71,7 +71,13 @@ func MessageSalahShareLoc(karyawan Karyawan) string {
 
 func MessagePresensiDitutup(karyawan Karyawan) string {
 	msg := "*Keterangan Presensi Kerja*\n"
-	msg = msg + "Hai kak _*" + karyawan.Nama + "*_,\ndari bagian *" + karyawan.Jabatan + "*, \nKakak sudah tidak melakukan presensi lagi nihh...\nKarena presensi sudah tidak dapat dilakukan setelah pukul 10.00 pagi.\nMakasih kakakk..."
+	msg = msg + "Hai kak _*" + karyawan.Nama + "*_,\ndari bagian *" + karyawan.Jabatan + "*, \nKakak sudah tidak bisa melakukan presensi lagi nihh...\nKarena presensi sudah tidak dapat dilakukan setelah pukul 10.00 pagi.\nMakasih kakakk..."
+	return msg
+}
+
+func MessageBelumBisaPresensiPulang(karyawan Karyawan) string {
+	msg := "*Keterangan Presensi Kerja*\n"
+	msg = msg + "Hai kak _*" + karyawan.Nama + "*_,\ndari bagian *" + karyawan.Jabatan + "*, \nKakak belum bisa melakukan presensi lagi nihh...\nKarena durasi presensi masuk kakak belum 2 jam.\nJika kakak ingin presensi pulang, silahkan lakukan jika presensi masuk sudah dirasa lebih dari 2 jam\nMakasih kakakk..."
 	return msg
 }
 
@@ -83,25 +89,9 @@ func MessagePulangKerja(karyawan Karyawan, durasikerja string, persentase string
 	return msg
 }
 
-func MessagePulangKerja8Jam(karyawan Karyawan, durasikerja string, persentase string, keterangan string, id interface{}, lokasi string) string {
-	msg := "*Pulang Kerja*\n"
-	msg = msg + "Hai kak _*" + karyawan.Nama + "*_,\ndari bagian *" + karyawan.Jabatan + "*, \nmakasih ya sudah melakukan presensi pulang kerja\nKakak sudah bekerja selama 8 Jam. Terima kasih sudah bekerja sesuai dengan aturan durasi kerja. Sampai bertemu kembali di esok hariii...\nLokasi : _*" + lokasi + "*_\n"
-	msg = msg + fmt.Sprintf("\nID presensi pulang : %v", id) + "\n" + "Durasi Kerja : " + durasikerja + "\n" + "Persentase Kerja : " + persentase + "\n"
-	msg = msg + fmt.Sprintf("Keterangan Pulang : *%s*\n", keterangan)
-	return msg
-}
-
 func MessagePulangKerjaCepat(karyawan Karyawan, durasikerja string, persentase string, keterangan string, id interface{}, lokasi string, selisihpulang string) string {
 	msg := "*Pulang Kerja*\n"
 	msg = msg + "Hai kak _" + karyawan.Nama + "_,\ndari bagian *" + karyawan.Jabatan + "*, \nkakak pulang lebih cepat " + selisihpulang + "\nLokasi : _*" + lokasi + "*_\n"
-	msg = msg + fmt.Sprintf("\nID presensi pulang : %v", id) + "\n" + "Durasi Kerja : " + durasikerja + "\n" + "Persentase Kerja : " + persentase + "\n"
-	msg = msg + fmt.Sprintf("Keterangan Pulang : *%s*\n", keterangan)
-	return msg
-}
-
-func MessagePulangKerjaBelumTuntas(karyawan Karyawan, durasikerja string, persentase string, keterangan string, id interface{}, lokasi string, selisihpulang string) string {
-	msg := "*Pulang Kerja*\n"
-	msg = msg + "Hai kak _" + karyawan.Nama + "_,\ndari bagian *" + karyawan.Jabatan + "*, \nkakak *BELUM TUNTAS* bekerja dan sudah melakukan presensi pulang " + selisihpulang + "\nLokasi : _*" + lokasi + "*_\n"
 	msg = msg + fmt.Sprintf("\nID presensi pulang : %v", id) + "\n" + "Durasi Kerja : " + durasikerja + "\n" + "Persentase Kerja : " + persentase + "\n"
 	msg = msg + fmt.Sprintf("Keterangan Pulang : *%s*\n", keterangan)
 	return msg

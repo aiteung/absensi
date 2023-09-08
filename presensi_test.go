@@ -82,11 +82,17 @@ var Msg = waProto.Message{
 // 	fmt.Println("Timestamp:", timestamp)
 // }
 
+// func TestTimeStamp(t *testing.T) {
+// 	// karyawan := getKaryawanFromPhoneNumber(MongoConn, Pesan.Sender.User)
+// 	//waktu := GetDateSekarang()
+// 	//fmt.Println(waktu)
+// 	waktu := GetPresensiTodayFromPhoneNumber(MongoConn, "6281312000300")
+// 	fmt.Println(waktu)
+// }
+
 func TestTimeStamp(t *testing.T) {
-	// karyawan := getKaryawanFromPhoneNumber(MongoConn, Pesan.Sender.User)
-	//waktu := GetDateSekarang()
-	//fmt.Println(waktu)
-	waktu := GetPresensiTodayFromPhoneNumber(MongoConn, "6281312000300")
+	// karyawan := getKaryawanFromPhoneNumber(MongoConn, "6289522910966")
+	waktu := GetBatasPresensi()
 	fmt.Println(waktu)
 }
 
