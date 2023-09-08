@@ -3,7 +3,6 @@ package absensi
 import (
 	"context"
 	"fmt"
-	"time"
 
 	"github.com/aiteung/module/model"
 	"go.mongodb.org/mongo-driver/bson"
@@ -50,7 +49,7 @@ func GetPresensiTodayFromPhoneNumber(mongoconn *mongo.Database, phone_number str
 	filter := bson.M{"phone_number": phone_number, "_id": today}
 	err := coll.FindOne(context.TODO(), filter).Decode(&presensi)
 	if err != nil {
-		fmt.Printf("getPresensiTodayFromPhoneNumber: %v\n", err)
+		fmt.Printf("GetPresensiTodayFromPhoneNumber: %v\n", err)
 	}
 	return presensi
 }
@@ -109,9 +108,9 @@ func getKaryawanFromPhoneNumber(mongoconn *mongo.Database, phone_number string) 
 func getPresensiTodayFromPhoneNumber(mongoconn *mongo.Database, phone_number string) (presensi Presensi) {
 	coll := mongoconn.Collection("presensi")
 	today := bson.M{
-		"$gte": primitive.NewDateTimeFromTime(time.Now().Truncate(24 * time.Hour).UTC()),
+		"$gte": primitive.NewObjectIDFromTimestamp(GetDateSekarang()),
 	}
-	filter := bson.M{"phone_number": phone_number, "datetime": today}
+	filter := bson.M{"phone_number": phone_number, "_id": today}
 	err := coll.FindOne(context.TODO(), filter).Decode(&presensi)
 	if err != nil {
 		fmt.Printf("getPresensiTodayFromPhoneNumber: %v\n", err)
@@ -122,9 +121,9 @@ func getPresensiTodayFromPhoneNumber(mongoconn *mongo.Database, phone_number str
 func getPresensiPulangTodayFromPhoneNumber(mongoconn *mongo.Database, phone_number string) (pulang Pulang) {
 	coll := mongoconn.Collection("presensi_pulang")
 	today := bson.M{
-		"$gte": primitive.NewDateTimeFromTime(time.Now().Truncate(24 * time.Hour).UTC()),
+		"$gte": primitive.NewObjectIDFromTimestamp(GetDateSekarang()),
 	}
-	filter := bson.M{"phone_number": phone_number, "datetime": today}
+	filter := bson.M{"phone_number": phone_number, "_id": today}
 	err := coll.FindOne(context.TODO(), filter).Decode(&pulang)
 	if err != nil {
 		fmt.Printf("getPresensiTodayFromPhoneNumber: %v\n", err)

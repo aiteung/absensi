@@ -7,7 +7,7 @@ toolchain go1.21.0
 require (
 	github.com/aiteung/atdb v0.0.13
 	github.com/aiteung/atmessage v0.0.31
-	github.com/aiteung/module v0.0.25
+	github.com/aiteung/module v0.0.27
 	github.com/mattn/go-sqlite3 v1.14.17
 	github.com/xuri/excelize/v2 v2.8.0
 	go.mau.fi/whatsmeow v0.0.0-20230906225421-9278fdeb4a6f

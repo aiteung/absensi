@@ -1,22 +1,12 @@
 package absensi
 
 import (
-	// "fmt"
-	// "log"
-
 	"fmt"
 	"os"
 	"testing"
-	"time"
 
 	"github.com/aiteung/atdb"
 	_ "github.com/mattn/go-sqlite3"
-
-	// "go.mongodb.org/mongo-driver/bson/primitive"
-
-	// "go.mau.fi/whatsmeow"
-	waProto "go.mau.fi/whatsmeow/binary/proto"
-	"go.mau.fi/whatsmeow/types"
 )
 
 var MongoInfo = atdb.DBInfo{
@@ -30,21 +20,8 @@ var MongoConn = atdb.MongoConnect(MongoInfo)
 // 	User: "6289522910966",
 // }
 
-var Pesan = types.MessageInfo{
-	PushName: "Testing",
-}
-
 var Long float64 = 107.57606294114771
 var Lat float64 = -6.873439789736144
-
-var LokConn = waProto.LiveLocationMessage{
-	DegreesLatitude:  &Lat,
-	DegreesLongitude: &Long,
-}
-
-var Msg = waProto.Message{
-	LiveLocationMessage: &LokConn,
-}
 
 // var client whatsmeow.Client
 
@@ -92,10 +69,8 @@ var Msg = waProto.Message{
 // }
 
 func TestTimeStamp(t *testing.T) {
-	presensihariini := getPresensiTodayFromPhoneNumber(MongoConn, "")
-	durasikerja, persentasekerja := DurasiKerja(time.Now().UTC().Sub(presensihariini.Id.Timestamp()), presensihariini.Id.Timestamp(), time.Now().UTC())
-	fmt.Println(durasikerja)
-	fmt.Println(persentasekerja)
+	presensihariini := getPresensiTodayFromPhoneNumber(MongoConn, "6281312000300")
+	fmt.Println(presensihariini)
 }
 
 // func TestTimeStamp(t *testing.T) {
