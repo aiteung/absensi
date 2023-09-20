@@ -83,17 +83,11 @@ func GetDataPresensiPulangHarianKemarin(db *mongo.Database) (data []Pulang, err 
 
 func GetDataPresensiMasukHarian(db *mongo.Database) (data []Presensi, err error) {
 	presensi := db.Collection("presensi")
-
-	// Get current date
-	now := time.Now()
-	startOfToday := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, time.UTC)
-	endOfToday := startOfToday.Add(24 * time.Hour)
-
 	// Create filter to query data for today
 	filter := bson.M{
-		"datetime": bson.M{
-			"$gte": startOfToday,
-			"$lt":  endOfToday,
+		"_id": bson.M{
+			"$gte": primitive.NewObjectIDFromTimestamp(GetDateSekarang()),
+			"$lt":  primitive.NewObjectIDFromTimestamp(GetDateSekarang().Add(24 * time.Hour)),
 		},
 	}
 
@@ -132,17 +126,11 @@ func GetDataPresensiPulang(db *mongo.Database) (data []Pulang, err error) {
 
 func GetDataPresensiPulangHarian(db *mongo.Database) (data []Pulang, err error) {
 	presensi := db.Collection("presensi_pulang")
-
-	// Ambil tanggal hari ini
-	today := time.Now().UTC()
-	startOfDay := time.Date(today.Year(), today.Month(), today.Day(), 0, 0, 0, 0, time.UTC)
-	endOfDay := startOfDay.Add(24 * time.Hour)
-
 	// Buat filter berdasarkan rentang waktu hari ini
 	filter := bson.M{
-		"datetime": bson.M{
-			"$gte": startOfDay,
-			"$lt":  endOfDay,
+		"_id": bson.M{
+			"$gte": primitive.NewObjectIDFromTimestamp(GetDateSekarang()),
+			"$lt":  primitive.NewObjectIDFromTimestamp(GetDateSekarang().Add(24 * time.Hour)),
 		},
 	}
 
