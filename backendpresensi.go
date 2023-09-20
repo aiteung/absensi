@@ -31,6 +31,56 @@ func GetDataPresensi(db *mongo.Database) (data []Presensi, err error) {
 	return data, nil
 }
 
+func GetDataPresensiMasukHarianKemarin(db *mongo.Database) (data []Presensi, err error) {
+	presensi := db.Collection("presensi")
+	// Create filter to query data for today
+	filter := bson.M{
+		"_id": bson.M{
+			"$gte": primitive.NewObjectIDFromTimestamp(GetDateKemarin()),
+			"$lt":  primitive.NewObjectIDFromTimestamp(GetDateKemarin().Add(24 * time.Hour)),
+		},
+	}
+
+	// Query the database
+	cur, err := presensi.Find(context.Background(), filter)
+
+	if err := cur.All(context.Background(), &data); err != nil {
+		return nil, err
+	}
+	defer cur.Close(context.Background())
+
+	if len(data) < 1 {
+		return nil, errors.New("data tidak ada")
+	}
+	return data, nil
+}
+
+func GetDataPresensiPulangHarianKemarin(db *mongo.Database) (data []Pulang, err error) {
+	presensi := db.Collection("presensi_pulang")
+	// Buat filter berdasarkan rentang waktu hari ini
+	filter := bson.M{
+		"_id": bson.M{
+			"$gte": primitive.NewObjectIDFromTimestamp(GetDateKemarin()),
+			"$lt":  primitive.NewObjectIDFromTimestamp(GetDateKemarin().Add(24 * time.Hour)),
+		},
+	}
+
+	cur, err := presensi.Find(context.TODO(), filter)
+	if err != nil {
+		return nil, err
+	}
+	defer cur.Close(context.TODO())
+
+	if err := cur.All(context.Background(), &data); err != nil {
+		return nil, err
+	}
+
+	if len(data) < 1 {
+		return nil, errors.New("data tidak ada")
+	}
+	return data, nil
+}
+
 func GetDataPresensiMasukHarian(db *mongo.Database) (data []Presensi, err error) {
 	presensi := db.Collection("presensi")
 

@@ -288,6 +288,16 @@ func GetDateSekarang() (datesekarang time.Time) {
 	return
 }
 
+func GetDateKemarin() (datekemarin time.Time) {
+	// Definisi lokasi waktu sekarang
+	location, _ := time.LoadLocation("Asia/Jakarta")
+
+	t := time.Now().AddDate(0, 0, -1).In(location) //.Truncate(24 * time.Hour)
+	datekemarin = time.Date(t.Year(), t.Month(), t.Day(), 0, 0, 0, 0, t.Location())
+
+	return
+}
+
 func GetTimeKerja(karyawan Karyawan) (timeKerjaFormatted string) {
 	jam := strings.Replace(karyawan.Jam_kerja[0].Jam_masuk, ".", ":", 1)
 	return jam
