@@ -69,8 +69,12 @@ var Lat float64 = -6.873439789736144
 // }
 
 func TestTimeStamp(t *testing.T) {
-	presensihariini := getPresensiTodayFromPhoneNumber(MongoConn, "6281312000300")
-	fmt.Println(presensihariini)
+	// presensihariini := getPresensiTodayFromPhoneNumber(MongoConn, "6281312000300")
+	// fmt.Println(presensihariini)
+	test := GetMulaiPresensi()
+	fmt.Println(test)
+	test2 := GetTimeNow()
+	fmt.Println(test2)
 }
 
 // func TestTimeStamp(t *testing.T) {

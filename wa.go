@@ -81,6 +81,12 @@ func MessageBelumBisaPresensiPulang(karyawan Karyawan) string {
 	return msg
 }
 
+func MessageBelumBisaPresensiMasuk(karyawan Karyawan) string {
+	msg := "*Keterangan Presensi Kerja*\n"
+	msg = msg + "Hai kak _*" + karyawan.Nama + "*_,\ndari bagian *" + karyawan.Jabatan + "*, \nKakak belum bisa melakukan presensi masuk nihh...\nKarena presensi masuk bisa dilakukan mulai dari pukul 06.00 pagi.\nSilahkan kakak coba lagi yaww kalau udah pukul 06.00 pagi\nMakasih kakakk..."
+	return msg
+}
+
 func MessagePulangKerja(karyawan Karyawan, durasikerja string, persentase string, keterangan string, id interface{}, lokasi string) string {
 	msg := "*Pulang Kerja*\n"
 	msg = msg + "Hai kak _*" + karyawan.Nama + "*_,\ndari bagian *" + karyawan.Jabatan + "*, \nmakasih ya sudah melakukan presensi pulang kerja\nKakak pulang tepat waktu pada pukul 16.30\nLokasi : _*" + lokasi + "*_\n"
