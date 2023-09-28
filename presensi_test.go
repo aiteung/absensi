@@ -75,6 +75,8 @@ func TestTimeStamp(t *testing.T) {
 	fmt.Println(test)
 	test2 := GetTimeNow()
 	fmt.Println(test2)
+	test3 := GetTimeSekarang()
+	fmt.Println(test3)
 }
 
 // func TestTimeStamp(t *testing.T) {

@@ -69,12 +69,7 @@ func hadirHandler(Pesan model.IteungMessage, lokasi string, mongoconn *mongo.Dat
 	tutup := GetBatasPresensi()
 	aktifjamkerja := time.Now().UTC().Sub(presensihariini.Id.Timestamp().UTC())
 	mulaipresensi := GetMulaiPresensi()
-	timenow := GetTimeNow()
 	fmt.Println(karyawan.Jam_kerja[0].Durasi)
-
-	if timenow.Before(mulaipresensi) {
-		msg = MessageBelumBisaPresensiMasuk(karyawan)
-	}
 
 	if !reflect.ValueOf(presensihariini).IsZero() {
 		fmt.Println(presensihariini)
@@ -101,15 +96,15 @@ func hadirHandler(Pesan model.IteungMessage, lokasi string, mongoconn *mongo.Dat
 		} else {
 			msg = MessageBelumBisaPresensiPulang(karyawan)
 		}
-	} else if waktu < masuk && waktu < tutup {
+	} else if waktu >= mulaipresensi && waktu < masuk && waktu < tutup {
 		keterangan := "Lebih Cepat"
 		id := InsertPresensi(Pesan, "masuk", keterangan, mongoconn)
 		msg = MessageMasukKerjaCepat(karyawan, id, lokasi, selisihmasukcepat, keterangan)
-	} else if waktu > masuk && waktu < tutup {
+	} else if waktu >= mulaipresensi && waktu > masuk && waktu < tutup {
 		keterangan := "Terlambat"
 		id := InsertPresensi(Pesan, "masuk", keterangan, mongoconn)
 		msg = MessageTerlambatKerja(karyawan, id, lokasi, selisihmasuk, keterangan)
-	} else if waktu == masuk && waktu < tutup {
+	} else if waktu >= mulaipresensi && waktu == masuk && waktu < tutup {
 		keterangan := "Tepat Waktu"
 		id := InsertPresensi(Pesan, "masuk", keterangan, mongoconn)
 		msg = MessageMasukKerjaTepatWaktu(karyawan, id, lokasi, keterangan)
