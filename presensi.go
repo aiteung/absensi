@@ -108,8 +108,10 @@ func hadirHandler(Pesan model.IteungMessage, lokasi string, mongoconn *mongo.Dat
 		keterangan := "Tepat Waktu"
 		id := InsertPresensi(Pesan, "masuk", keterangan, mongoconn)
 		msg = MessageMasukKerjaTepatWaktu(karyawan, id, lokasi, keterangan)
-	} else {
+	} else if waktu > tutup {
 		msg = MessagePresensiDitutup(karyawan)
+	} else {
+		msg = MessageBelumBisaPresensiMasuk(karyawan)
 	}
 	return
 }
