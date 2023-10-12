@@ -1,6 +1,7 @@
 package absensi
 
 import (
+	"database/sql"
 	"fmt"
 	"os"
 	"testing"
@@ -68,15 +69,24 @@ var Lat float64 = -6.873439789736144
 // 	fmt.Println(waktu)
 // }
 
-func TestTimeStamp(t *testing.T) {
-	// presensihariini := getPresensiTodayFromPhoneNumber(MongoConn, "6281312000300")
-	// fmt.Println(presensihariini)
-	test := GetMulaiPresensi()
-	fmt.Println(test)
-	test2 := GetTimeNow()
-	fmt.Println(test2)
-	test3 := GetTimeSekarang()
-	fmt.Println(test3)
+// func TestTimeStamp(t *testing.T) {
+// 	// presensihariini := getPresensiTodayFromPhoneNumber(MongoConn, "6281312000300")
+// 	// fmt.Println(presensihariini)
+// 	test := GetMulaiPresensi()
+// 	fmt.Println(test)
+// 	test2 := GetTimeNow()
+// 	fmt.Println(test2)
+// 	test3 := GetTimeSekarang()
+// 	fmt.Println(test3)
+// }
+
+func TestGetKaryawanRtm(t *testing.T) {
+	db, err := sql.Open("mysql", "root:rollyganteng@tcp(10.14.200.20:42136)/rtm?parseTime=true")
+	if err != nil {
+		panic(err)
+	}
+	karyawan := GetKaryawanByPhoneNumberRtm(db, "6289522910966")
+	fmt.Println(karyawan)
 }
 
 // func TestTimeStamp(t *testing.T) {

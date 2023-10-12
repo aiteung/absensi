@@ -7,12 +7,25 @@ import (
 )
 
 type Karyawan struct { //data karwayan unik
-	ID           primitive.ObjectID `bson:"_id,omitempty" json:"_id"`
-	Nama         string             `bson:"nama" json:"nama"`
-	Phone_number string             `bson:"phone_number" json:"phone_number"`
-	Jabatan      string             `bson:"jabatan" json:"jabatan"`
-	Jam_kerja    []JamKerja         `bson:"jam_kerja" json:"jam_kerja"`
-	Hari_kerja   []string           `bson:"hari_kerja" json:"hari_kerja"`
+	ID             primitive.ObjectID `bson:"_id,omitempty" json:"_id"`
+	Nama           string             `bson:"nama" json:"nama"`
+	Phone_number   string             `bson:"phone_number" json:"phone_number"`
+	Jabatan        string             `bson:"jabatan" json:"jabatan"`
+	NikKtp         string             `gorm:"column:nik_ktp" json:"nik_ktp"`
+	NikKepegawaian string             `gorm:"column:nik_kepegawaian" json:"nik_kepegawaian"`
+	Jam_kerja      []JamKerja         `bson:"jam_kerja" json:"jam_kerja"`
+	Hari_kerja     []string           `bson:"hari_kerja" json:"hari_kerja"`
+}
+
+// Karyawan dari RTM
+type TblRtm struct {
+	IdUsers      int    `gorm:"primaryKey;column:id_users" json:"id_users"`
+	FullName     string `gorm:"column:full_name" json:"full_name"`
+	Email        string `gorm:"column:email" json:"email"`
+	NomorTelepon string `gorm:"column:nomo_telepon" json:"nomo_telepon"`
+	IdUserLevel  int    `gorm:"column:id_user_level" json:"id_user_level"`
+	IdSiap       int    `gorm:"column:id_siap" json:"id_siap"`
+	JabatanId    int    `gorm:"column:jabatan_id" json:"jabatan_id"`
 }
 
 type JamKerja struct { //info tambahan dari karyawan
