@@ -105,10 +105,66 @@ func GetDataPresensiMasukHarian(db *mongo.Database) (data []Presensi, err error)
 	return data, nil
 }
 
+func GetDataPresensiMasukBulanan(bulan time.Month, tahun int, db *mongo.Database) (data []Presensi, err error) {
+	presensi := db.Collection("presensi")
+	startOfMonth := time.Date(tahun, bulan, 1, 0, 0, 0, 0, time.UTC)
+	endOfMonth := startOfMonth.AddDate(0, 1, 0)
+
+	filter := bson.M{
+		"_id": bson.M{
+			"$gte": primitive.NewObjectIDFromTimestamp(startOfMonth),
+			"$lt":  primitive.NewObjectIDFromTimestamp(endOfMonth),
+		},
+	}
+
+	cur, err := presensi.Find(context.Background(), filter)
+	if err != nil {
+		return nil, err
+	}
+	defer cur.Close(context.Background())
+
+	if err := cur.All(context.Background(), &data); err != nil {
+		return nil, err
+	}
+
+	if len(data) < 1 {
+		return nil, errors.New("data tidak ada")
+	}
+	return data, nil
+}
+
 func GetDataPresensiPulang(db *mongo.Database) (data []Pulang, err error) {
 	pulang := db.Collection("presensi_pulang")
 	filter := bson.M{} // Empty filter to get all data
 	cur, err := pulang.Find(context.TODO(), filter)
+	if err != nil {
+		return nil, err
+	}
+	defer cur.Close(context.TODO())
+
+	if err := cur.All(context.Background(), &data); err != nil {
+		return nil, err
+	}
+
+	if len(data) < 1 {
+		return nil, errors.New("data tidak ada")
+	}
+	return data, nil
+}
+
+func GetDataPresensiPulangBulanan(bulan time.Month, tahun int, db *mongo.Database) (data []Pulang, err error) {
+	presensi := db.Collection("presensi_pulang")
+	startOfMonth := time.Date(tahun, bulan, 1, 0, 0, 0, 0, time.UTC)
+	endOfMonth := startOfMonth.AddDate(0, 1, 0)
+
+	filter := bson.M{
+		"_id": bson.M{
+			"$gte": primitive.NewObjectIDFromTimestamp(startOfMonth),
+			"$lt":  primitive.NewObjectIDFromTimestamp(endOfMonth),
+		},
+	}
+
+	cur, err := presensi.Find(context.TODO(), filter)
 	if err != nil {
 		return nil, err
 	}
