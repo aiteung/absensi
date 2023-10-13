@@ -6,11 +6,11 @@ toolchain go1.21.0
 
 require (
 	github.com/aiteung/atdb v0.0.14
-	github.com/aiteung/atmessage v0.0.33
+	github.com/aiteung/atmessage v0.1.0
 	github.com/aiteung/module v0.0.27
 	github.com/mattn/go-sqlite3 v1.14.17
 	github.com/xuri/excelize/v2 v2.8.0
-	go.mau.fi/whatsmeow v0.0.0-20230926223531-00abc29ba510
+	go.mau.fi/whatsmeow v0.0.0-20231012085332-3b594311284e
 	go.mongodb.org/mongo-driver v1.12.1
 )
 
@@ -36,9 +36,9 @@ require (
 	github.com/youmark/pkcs8 v0.0.0-20201027041543-1326539a0a0a // indirect
 	go.mau.fi/libsignal v0.1.0 // indirect
 	go.mau.fi/util v0.1.0 // indirect
-	golang.org/x/crypto v0.13.0 // indirect
-	golang.org/x/net v0.15.0 // indirect
-	golang.org/x/sync v0.3.0 // indirect
+	golang.org/x/crypto v0.14.0 // indirect
+	golang.org/x/net v0.17.0 // indirect
+	golang.org/x/sync v0.4.0 // indirect
 	golang.org/x/text v0.13.0 // indirect
 	google.golang.org/protobuf v1.31.0 // indirect
 )
