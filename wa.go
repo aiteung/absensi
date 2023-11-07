@@ -13,6 +13,7 @@ import (
 func MessageTidakMasukKerja(nama string, long, lat float64) string {
 	msg := "*Selamat Datang di Layanan Presensi Kak...*\n"
 	msg = msg + "Hai kak " + nama + ", kakak belum berada pada lokasi presensi nih, ke lokasi presensi dulu ya kak. Atau barangkali ada perlu lain kak?\n"
+	msg = msg + fmt.Sprintf("Jika kakak memiliki kendala terkait sistem presensi kehadiran dapat menghubungi nomor berikut :  \n1. 0895-2291-0966 an. Valen\n2. 0852-1392-1331 an. Bachtiar. Jika kakak berhalangan hadir, maka dapat menyampaikan alasan ketidakhadiran & dokumen pendukungnya pada link berikut : \nhttps://bit.ly/Formulir_ketidakhadirankerja\n")
 	msg = msg + fmt.Sprintf("Lokasi kakak saat ini di koordinat : https://www.google.com/maps/@%f,%f,20z", lat, long)
 	return msg
 }

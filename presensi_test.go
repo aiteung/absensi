@@ -1,10 +1,10 @@
 package absensi
 
 import (
-	"database/sql"
 	"fmt"
 	"os"
 	"testing"
+	"time"
 
 	"github.com/aiteung/atdb"
 	_ "github.com/mattn/go-sqlite3"
@@ -80,13 +80,20 @@ var Lat float64 = -6.873439789736144
 // 	fmt.Println(test3)
 // }
 
-func TestGetKaryawanRtm(t *testing.T) {
-	db, err := sql.Open("mysql", "root:rollyganteng@tcp(10.14.200.20:42136)/rtm?parseTime=true")
-	if err != nil {
-		panic(err)
-	}
-	karyawan := GetKaryawanByPhoneNumberRtm(db, "6289522910966")
-	fmt.Println(karyawan)
+// func TestGetKaryawanRtm(t *testing.T) {
+// 	db, err := sql.Open("mysql", "root:rollyganteng@tcp(10.14.200.20:42136)/rtm?parseTime=true")
+// 	if err != nil {
+// 		panic(err)
+// 	}
+// 	karyawan := GetKaryawanByPhoneNumberRtm(db, "6289522910966")
+// 	fmt.Println(karyawan)
+// }
+
+func TestRekapBulanan(t *testing.T) {
+	bulan := time.August // Ganti dengan bulan yang sesuai
+	tahun := 2023        // Ganti dengan tahun yang sesuai
+	test, _ := GetDataPresensiMasukBulanan(bulan, tahun, MongoConn)
+	fmt.Println(test)
 }
 
 // func TestTimeStamp(t *testing.T) {
