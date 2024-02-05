@@ -227,21 +227,21 @@ func GetTimePulang(karyawan Karyawan) (timePulangFormatted string) {
 	return jam
 }
 
-func GetBatasPresensi() string {
-	// Buat objek lokasi zona waktu Asia/Jakarta
-	location, _ := time.LoadLocation("Asia/Jakarta")
-
-	// Dapatkan waktu saat ini dalam zona waktu Asia/Jakarta
-	now := time.Now().In(location)
-
-	// Set waktu pukul 10:00 pagi
-	pukulSepuluh := time.Date(now.Year(), now.Month(), now.Day(), 10, 0, 0, 0, location)
-
-	// Format waktu pukul 10:00 sebagai string
-	result := pukulSepuluh.Format("15:04")
-
-	return result
-}
+//func GetBatasPresensi() string {
+//	// Buat objek lokasi zona waktu Asia/Jakarta
+//	location, _ := time.LoadLocation("Asia/Jakarta")
+//
+//	// Dapatkan waktu saat ini dalam zona waktu Asia/Jakarta
+//	now := time.Now().In(location)
+//
+//	// Set waktu pukul 10:00 pagi
+//	pukulSepuluh := time.Date(now.Year(), now.Month(), now.Day(), 10, 0, 0, 0, location)
+//
+//	// Format waktu pukul 10:00 sebagai string
+//	result := pukulSepuluh.Format("15:04")
+//
+//	return result
+//}
 
 func GetMulaiPresensi() (waktumulai string) {
 	loc, _ := time.LoadLocation("Asia/Jakarta")
