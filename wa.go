@@ -78,7 +78,7 @@ func MessagePresensiDitutup(karyawan Karyawan) string {
 
 func MessageBelumBisaPresensiPulang(karyawan Karyawan) string {
 	msg := "*Keterangan Presensi Kerja*\n"
-	msg = msg + "Hai kak _*" + karyawan.Nama + "*_,\ndari bagian *" + karyawan.Jabatan + "*, \nKakak belum bisa melakukan presensi lagi nihh...\nKarena durasi presensi masuk kakak belum 2 jam.\nJika kakak ingin presensi pulang, silahkan lakukan jika presensi masuk sudah dirasa lebih dari 2 jam\nMakasih kakakk..."
+	msg = msg + "Hai kak _*" + karyawan.Nama + "*_,\ndari bagian *" + karyawan.Jabatan + "*, \nKakak belum bisa melakukan presensi lagi nihh...\nKarena durasi presensi masuk kakak belum 1 jam.\nJika kakak ingin presensi pulang, silahkan lakukan jika presensi masuk sudah dirasa lebih dari 1 jam\nMakasih kakakk..."
 	return msg
 }
 
