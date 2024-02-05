@@ -74,7 +74,7 @@ func hadirHandler(Pesan model.IteungMessage, lokasi string, mongoconn *mongo.Dat
 		fmt.Println(presensihariini)
 		fmt.Println(aktifjamkerja)
 		// Tambahkan kondisi ini untuk memeriksa durasi kerja sebelum mengizinkan presensi pulang
-		if aktifjamkerja >= (2 * time.Hour) {
+		if aktifjamkerja >= (1 * time.Hour) {
 			if waktu < pulang && reflect.ValueOf(presensipulanghariini).IsZero() {
 				keterangan := "Lebih Cepat"
 				id := InsertPresensiPulang(Pesan, "pulang", keterangan, durasikerja, persentasekerja, mongoconn)
