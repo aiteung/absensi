@@ -57,7 +57,6 @@ func hadirHandler(Pesan model.IteungMessage, lokasi string, mongoconn *mongo.Dat
 	presensihariini := getPresensiTodayFromPhoneNumber(mongoconn, Pesan.Phone_number)
 	presensipulanghariini := getPresensiPulangTodayFromPhoneNumber(mongoconn, Pesan.Phone_number)
 	durasikerja, persentasekerja := DurasiKerja(time.Now().UTC().Sub(presensihariini.Id.Timestamp()), presensihariini.Id.Timestamp(), time.Now().UTC())
-	// durasikerja := DurasiKerja(time.Now().UTC().Sub(presensihariini.ID.Timestamp()), presensihariini.ID.Timestamp(), time.Now().UTC())
 	karyawan := getKaryawanFromPhoneNumber(mongoconn, Pesan.Phone_number)
 	waktu := GetTimeSekarang()
 	pulang := GetTimePulang(karyawan)
@@ -66,7 +65,7 @@ func hadirHandler(Pesan model.IteungMessage, lokasi string, mongoconn *mongo.Dat
 	masuk := GetTimeKerja(karyawan)
 	selisihmasukcepat := SelisihJamMasukCepat(karyawan)
 	selisihmasuk := SelisihJamMasuk(karyawan)
-	tutup := GetBatasPresensi()
+	//tutup := GetBatasPresensi()
 	aktifjamkerja := time.Now().UTC().Sub(presensihariini.Id.Timestamp().UTC())
 	mulaipresensi := GetMulaiPresensi()
 	fmt.Println(karyawan.Jam_kerja[0].Durasi)
@@ -96,20 +95,18 @@ func hadirHandler(Pesan model.IteungMessage, lokasi string, mongoconn *mongo.Dat
 		} else {
 			msg = MessageBelumBisaPresensiPulang(karyawan)
 		}
-	} else if waktu >= mulaipresensi && waktu < masuk && waktu < tutup {
+	} else if waktu >= mulaipresensi && waktu < masuk {
 		keterangan := "Lebih Cepat"
 		id := InsertPresensi(Pesan, "masuk", keterangan, mongoconn)
 		msg = MessageMasukKerjaCepat(karyawan, id, lokasi, selisihmasukcepat, keterangan)
-	} else if waktu >= mulaipresensi && waktu > masuk && waktu < tutup {
+	} else if waktu >= mulaipresensi && waktu > masuk {
 		keterangan := "Terlambat"
 		id := InsertPresensi(Pesan, "masuk", keterangan, mongoconn)
 		msg = MessageTerlambatKerja(karyawan, id, lokasi, selisihmasuk, keterangan)
-	} else if waktu >= mulaipresensi && waktu == masuk && waktu < tutup {
+	} else if waktu >= mulaipresensi && waktu == masuk {
 		keterangan := "Tepat Waktu"
 		id := InsertPresensi(Pesan, "masuk", keterangan, mongoconn)
 		msg = MessageMasukKerjaTepatWaktu(karyawan, id, lokasi, keterangan)
-	} else if waktu > tutup {
-		msg = MessagePresensiDitutup(karyawan)
 	} else {
 		msg = MessageBelumBisaPresensiMasuk(karyawan)
 	}
