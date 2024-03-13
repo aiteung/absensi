@@ -233,9 +233,3 @@ func GetMulaiPresensi() (waktumulai string) {
 	waktuMulai := time.Date(waktuSekarang.Year(), waktuSekarang.Month(), waktuSekarang.Day(), 6, 0, 0, 0, loc)
 	return waktuMulai.Format("15:04")
 }
-
-func GetTimeNow() time.Time {
-	loc, _ := time.LoadLocation("Asia/Jakarta")
-	waktuSekarang := time.Now().In(loc)
-	return waktuSekarang
-}
