@@ -233,3 +233,10 @@ func GetMulaiPresensi() (waktumulai string) {
 	waktuMulai := time.Date(waktuSekarang.Year(), waktuSekarang.Month(), waktuSekarang.Day(), 6, 0, 0, 0, loc)
 	return waktuMulai.Format("15:04")
 }
+
+func GetJamRamadhan() (waktumasuk string) {
+	loc, _ := time.LoadLocation("Asia/Jakarta")
+	waktuSekarang := time.Now().In(loc)
+	waktuMulai := time.Date(waktuSekarang.Year(), waktuSekarang.Month(), waktuSekarang.Day(), 8, 30, 0, 0, loc)
+	return waktuMulai.Format("15:04")
+}
