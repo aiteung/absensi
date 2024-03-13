@@ -62,7 +62,9 @@ func hadirHandler(Pesan model.IteungMessage, lokasi string, mongoconn *mongo.Dat
 	pulang := GetTimePulang(karyawan)
 	selisihpulangcepat := SelisihJamPulangCepat(karyawan)
 	selisihpulang := SelisihJamPulang(karyawan)
-	masuk := GetTimeKerja(karyawan)
+	// Waktu Masuk Normal 08:00
+	//masuk := GetTimeKerja(karyawan)
+	masukRamadhan := GetJamRamadhan()
 	selisihmasukcepat := SelisihJamMasukCepat(karyawan)
 	selisihmasuk := SelisihJamMasuk(karyawan)
 	//tutup := GetBatasPresensi()
@@ -95,15 +97,15 @@ func hadirHandler(Pesan model.IteungMessage, lokasi string, mongoconn *mongo.Dat
 		} else {
 			msg = MessageBelumBisaPresensiPulang(karyawan)
 		}
-	} else if waktu >= mulaipresensi && waktu < masuk {
+	} else if waktu >= mulaipresensi && waktu < masukRamadhan {
 		keterangan := "Lebih Cepat"
 		id := InsertPresensi(Pesan, "masuk", keterangan, mongoconn)
 		msg = MessageMasukKerjaCepat(karyawan, id, lokasi, selisihmasukcepat, keterangan)
-	} else if waktu >= mulaipresensi && waktu > masuk {
+	} else if waktu >= mulaipresensi && waktu > masukRamadhan {
 		keterangan := "Terlambat"
 		id := InsertPresensi(Pesan, "masuk", keterangan, mongoconn)
 		msg = MessageTerlambatKerja(karyawan, id, lokasi, selisihmasuk, keterangan)
-	} else if waktu >= mulaipresensi && waktu == masuk {
+	} else if waktu >= mulaipresensi && waktu == masukRamadhan {
 		keterangan := "Tepat Waktu"
 		id := InsertPresensi(Pesan, "masuk", keterangan, mongoconn)
 		msg = MessageMasukKerjaTepatWaktu(karyawan, id, lokasi, keterangan)
