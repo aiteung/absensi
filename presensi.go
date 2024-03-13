@@ -59,12 +59,15 @@ func hadirHandler(Pesan model.IteungMessage, lokasi string, mongoconn *mongo.Dat
 	durasikerja, persentasekerja := DurasiKerja(time.Now().UTC().Sub(presensihariini.Id.Timestamp()), presensihariini.Id.Timestamp(), time.Now().UTC())
 	karyawan := getKaryawanFromPhoneNumber(mongoconn, Pesan.Phone_number)
 	waktu := GetTimeSekarang()
-	pulang := GetTimePulang(karyawan)
+	// Waktu Pulang Normal 16:30
+	//pulang := GetTimePulang(karyawan)
 	selisihpulangcepat := SelisihJamPulangCepat(karyawan)
 	selisihpulang := SelisihJamPulang(karyawan)
 	// Waktu Masuk Normal 08:00
 	//masuk := GetTimeKerja(karyawan)
+	// Jam Selama Ramadhan
 	masukRamadhan := GetJamRamadhan()
+	pulangRamadhan := GetJamPulangRamadhan()
 	selisihmasukcepat := SelisihJamMasukCepat(karyawan)
 	selisihmasuk := SelisihJamMasuk(karyawan)
 	//tutup := GetBatasPresensi()
@@ -77,15 +80,15 @@ func hadirHandler(Pesan model.IteungMessage, lokasi string, mongoconn *mongo.Dat
 		fmt.Println(aktifjamkerja)
 		// Tambahkan kondisi ini untuk memeriksa durasi kerja sebelum mengizinkan presensi pulang
 		if aktifjamkerja >= (1 * time.Hour) {
-			if waktu < pulang && reflect.ValueOf(presensipulanghariini).IsZero() {
+			if waktu < pulangRamadhan && reflect.ValueOf(presensipulanghariini).IsZero() {
 				keterangan := "Lebih Cepat"
 				id := InsertPresensiPulang(Pesan, "pulang", keterangan, durasikerja, persentasekerja, mongoconn)
 				msg = MessagePulangKerjaCepat(karyawan, durasikerja, persentasekerja, keterangan, id, lokasi, selisihpulangcepat)
-			} else if waktu > pulang && reflect.ValueOf(presensipulanghariini).IsZero() {
+			} else if waktu > pulangRamadhan && reflect.ValueOf(presensipulanghariini).IsZero() {
 				keterangan := "Lebih Lama"
 				id := InsertPresensiPulang(Pesan, "pulang", keterangan, durasikerja, persentasekerja, mongoconn)
 				msg = MessagePulangLebihLama(karyawan, durasikerja, persentasekerja, keterangan, id, lokasi, selisihpulang)
-			} else if waktu == pulang && reflect.ValueOf(presensipulanghariini).IsZero() {
+			} else if waktu == pulangRamadhan && reflect.ValueOf(presensipulanghariini).IsZero() {
 				keterangan := "Tepat Waktu"
 				id := InsertPresensiPulang(Pesan, "pulang", keterangan, durasikerja, persentasekerja, mongoconn)
 				msg = MessagePulangKerja(karyawan, durasikerja, persentasekerja, keterangan, id, lokasi)
