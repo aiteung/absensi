@@ -23,3 +23,7 @@ func TestRekapBulanan(t *testing.T) {
 	test, _ := GetDataPresensiMasukBulanan(bulan, tahun, MongoConn)
 	fmt.Println(test)
 }
+
+func TestJamRamadhan(t *testing.T) {
+	fmt.Println("Waktu Ramadhan : ", GetJamRamadhan())
+}
