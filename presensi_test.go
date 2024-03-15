@@ -25,5 +25,5 @@ func TestRekapBulanan(t *testing.T) {
 }
 
 func TestJamRamadhan(t *testing.T) {
-	fmt.Println("Waktu Ramadhan : ", GetJamPulangRamadhan())
+	fmt.Println("Selisih Waktu Masuk Ramadhan : ", SelisihJamMasukRamadhan())
 }
