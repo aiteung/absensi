@@ -61,8 +61,11 @@ func hadirHandler(Pesan model.IteungMessage, lokasi string, mongoconn *mongo.Dat
 	waktu := GetTimeSekarang()
 	// Waktu Pulang Normal 16:30
 	//pulang := GetTimePulang(karyawan)
-	selisihpulangcepat := SelisihJamPulangCepat(karyawan)
+	// Selisih Waktu Pulang Normal
+	//selisihpulangcepat := SelisihJamPulangCepat(karyawan)
 	selisihpulang := SelisihJamPulang(karyawan)
+	// Selisih pulang selama Ramadhan
+	selisihpulangcepatRamadhan := SelisihJamPulangCepatRamadhan()
 	// Waktu Masuk Normal 08:00
 	//masuk := GetTimeKerja(karyawan)
 	// Jam Selama Ramadhan
@@ -71,6 +74,7 @@ func hadirHandler(Pesan model.IteungMessage, lokasi string, mongoconn *mongo.Dat
 	// Selisih Waktu Masuk Normal
 	//selisihmasukcepat := SelisihJamMasukCepat(karyawan)
 	//selisihmasuk := SelisihJamMasuk(karyawan)
+	// Selisih masuk selama Ramadhan
 	selisihmasukcepatRamadhan := SelisihJamMasukCepatRamadhan()
 	selisihmasukRamadhan := SelisihJamMasukRamadhan()
 	//tutup := GetBatasPresensi()
@@ -86,7 +90,7 @@ func hadirHandler(Pesan model.IteungMessage, lokasi string, mongoconn *mongo.Dat
 			if waktu < pulangRamadhan && reflect.ValueOf(presensipulanghariini).IsZero() {
 				keterangan := "Lebih Cepat"
 				id := InsertPresensiPulang(Pesan, "pulang", keterangan, durasikerja, persentasekerja, mongoconn)
-				msg = MessagePulangKerjaCepat(karyawan, durasikerja, persentasekerja, keterangan, id, lokasi, selisihpulangcepat)
+				msg = MessagePulangKerjaCepat(karyawan, durasikerja, persentasekerja, keterangan, id, lokasi, selisihpulangcepatRamadhan)
 			} else if waktu > pulangRamadhan && reflect.ValueOf(presensipulanghariini).IsZero() {
 				keterangan := "Lebih Lama"
 				id := InsertPresensiPulang(Pesan, "pulang", keterangan, durasikerja, persentasekerja, mongoconn)
