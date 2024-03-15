@@ -256,6 +256,40 @@ func SelisihJamPulangCepat(karyawan Karyawan) (selisihJamFormatted string) {
 	return selisihJam
 }
 
+func SelisihJamPulangCepatRamadhan() (selisihJamFormatted string) {
+	// Replace 10.00 ke 10:00
+	jam := GetJamPulangRamadhan()
+	fmt.Println("Jam Pulang :", jam)
+
+	// Definisi lokasi waktu sekarang
+	location, _ := time.LoadLocation("Asia/Jakarta")
+	jamKeluar := time.Now().In(location)
+	fmt.Println("Datetime Now :", jamKeluar)
+
+	// Convert string menjadi time
+	jamKeluar, _ = time.Parse("15:04", jam)
+	fmt.Println("Datetime Pulang :", jamKeluar)
+
+	// Waktu Sekarang dan Convert Waktu Sekarang menjadi format 15:04 (string)
+	waktuSekarang := time.Now().In(location).Format("15:04")
+	fmt.Println("Final Waktu Sekarang :", waktuSekarang)
+
+	// Dijadikan datetime agar bisa dihitung selisih nya
+	formatjam, _ := time.Parse("15:04", waktuSekarang)
+	fmt.Println("Datetime Waktu Sekarang :", formatjam)
+
+	// Hitung selisih waktu
+	selisihJam := jamKeluar.Sub(formatjam).String()
+	// fmt.Println("Selisih Jam Masuk :", selisihJam)
+
+	// Ubah Hours, Minutes dan Seconds ke Jam, Menit dan Detik
+	selisihJam = strings.Replace(selisihJam, "m", " menit ", 1)
+	selisihJam = strings.Replace(selisihJam, "h", " jam ", 1)
+	selisihJam = strings.Replace(selisihJam, "s", " detik ", 1)
+	fmt.Println("Final Selisih Jam Pulang :", selisihJam)
+	return selisihJam
+}
+
 func GetTimeSekarang() (timeSekarangFormatted string) {
 	// Definisi lokasi waktu sekarang
 	location, _ := time.LoadLocation("Asia/Jakarta")
