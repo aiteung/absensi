@@ -27,3 +27,9 @@ func TestRekapBulanan(t *testing.T) {
 func TestJamRamadhan(t *testing.T) {
 	fmt.Println("Selisih Waktu Masuk Ramadhan : ", SelisihJamMasukRamadhan())
 }
+
+func TestJamMasuk(t *testing.T) {
+	karyawan := GetKaryawanFromPhoneNumber(MongoConn, "6289522910966")
+	test := GetTimeKerja(karyawan)
+	fmt.Println(test)
+}
