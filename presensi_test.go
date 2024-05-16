@@ -2,6 +2,7 @@ package absensi
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"testing"
 	"time"
@@ -32,4 +33,15 @@ func TestJamMasuk(t *testing.T) {
 	karyawan := GetKaryawanFromPhoneNumber(MongoConn, "6289522910966")
 	test := GetTimeKerja(karyawan)
 	fmt.Println(test)
+}
+
+func TestRataRataPresensi(t *testing.T) {
+	rataRata, nama, jabatan, err := GetRataRataPresensiPulang(MongoConn)
+	if err != nil {
+		log.Fatalf("GetRataRataPresensiPulang returned an error: %v", err)
+	}
+
+	for id, avg := range rataRata {
+		fmt.Printf("Nama: %s\nJabatan: %s\nRata-rata Kehadiran: %.2f%%\n", nama[id], jabatan[id], avg)
+	}
 }
