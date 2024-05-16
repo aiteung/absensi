@@ -4,6 +4,9 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"log"
+	"strconv"
+	"strings"
 	"time"
 
 	"github.com/xuri/excelize/v2"
@@ -178,6 +181,78 @@ func GetDataPresensiPulangBulanan(bulan time.Month, tahun int, db *mongo.Databas
 		return nil, errors.New("data tidak ada")
 	}
 	return data, nil
+}
+
+func GetRataRataPresensiPulang(db *mongo.Database) (map[string]float64, map[string]string, map[string]string, error) {
+	log.Println("Starting GetRataRataPresensiPulangSemua")
+
+	// Koleksi presensi_pulang
+	presensi := db.Collection("presensi_pulang")
+
+	// Tentukan rentang tanggal
+	startDate, _ := time.Parse(time.RFC3339, "2023-09-01T00:00:00Z")
+	endDate, _ := time.Parse(time.RFC3339, "2024-05-15T23:59:59Z")
+
+	// Buat filter untuk query
+	filter := bson.M{
+		"datetime": bson.M{
+			"$gte": startDate,
+			"$lte": endDate,
+		},
+	}
+	log.Println("Filter created:", filter)
+
+	// Lakukan operasi find
+	cur, err := presensi.Find(context.TODO(), filter)
+	if err != nil {
+		log.Println("Error executing Find:", err)
+		return nil, nil, nil, err
+	}
+	defer cur.Close(context.TODO())
+
+	var data []Pulang
+	// Decode hasil query
+	if err := cur.All(context.Background(), &data); err != nil {
+		log.Println("Error decoding data:", err)
+		return nil, nil, nil, err
+	}
+	log.Println("Data retrieved:", data)
+
+	if len(data) < 1 {
+		return nil, nil, nil, fmt.Errorf("data tidak ada")
+	}
+
+	// Map untuk menyimpan total persentase dan jumlah kehadiran setiap orang
+	totalPersentase := make(map[string]float64)
+	jumlahKehadiran := make(map[string]int)
+	nama := make(map[string]string)
+	jabatan := make(map[string]string)
+
+	// Hitung total persentase dan jumlah kehadiran setiap orang
+	for _, d := range data {
+		biodataID := d.Karyawan.ID.Hex()
+
+		// Hapus simbol persen dan konversi ke float
+		persentaseStr := strings.TrimSuffix(d.Persentase, "%")
+		persentase, err := strconv.ParseFloat(persentaseStr, 64)
+		if err != nil {
+			log.Println("Error converting persentase:", err)
+			return nil, nil, nil, err
+		}
+
+		totalPersentase[biodataID] += persentase
+		jumlahKehadiran[biodataID]++
+		nama[biodataID] = d.Karyawan.Nama
+		jabatan[biodataID] = d.Karyawan.Jabatan
+	}
+
+	// Map untuk menyimpan rata-rata persentase kehadiran setiap orang
+	rataRataPersentase := make(map[string]float64)
+	for id, total := range totalPersentase {
+		rataRataPersentase[id] = total / float64(jumlahKehadiran[id])
+	}
+
+	return rataRataPersentase, nama, jabatan, nil
 }
 
 func GetDataPresensiPulangHarian(db *mongo.Database) (data []Pulang, err error) {
